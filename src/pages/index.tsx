@@ -91,6 +91,9 @@ const HomePage = () => {
                 borderRadius="full"
                 size="md"
                 bgColor="blue.500"
+                _hover={{
+                  bgColor: "blue.600",
+                }}
               />
             </Link>
           </Box>
