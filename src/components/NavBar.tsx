@@ -1,45 +1,56 @@
 import { HStack, Image, Text, VStack } from "@chakra-ui/react";
-import { SideBarMenu } from "./types/common";
-import { Fragment } from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import { menus } from "./utils";
+import { Fragment } from "react";
+import { SideBarMenu } from "./types/common";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
-const SideBar = () => {
+const NavBar = () => {
   return (
-    <VStack
-      alignItems="stretch"
+    <HStack
+      display={["flex", null, "none"]}
       spacing={4}
-      py={4}
-      boxShadow="0px 0px 4px 1px #00000020"
-      display={["none", null, "flex"]}
+      pos="fixed"
+      bottom={0}
+      left={0}
+      right={0}
+      zIndex={99}
+      bgColor="white"
     >
       {menus.map((menu, index) => {
         return (
           <Fragment key={index}>
-            <MenuTile menu={menu} />
+            <NavBarItem menu={menu} />
           </Fragment>
         );
       })}
-    </VStack>
+    </HStack>
   );
 };
 
-const MenuTile = ({ menu }: { menu: SideBarMenu }) => {
+const NavBarItem = ({ menu }: { menu: SideBarMenu }) => {
   const router = useRouter();
   const isMenuSelected =
     router.asPath === "/"
       ? menu.url === router.asPath
       : menu.url.includes(router.asPath);
+
   return (
-    <Link href={menu.url} passHref>
-      <HStack
+    <Link
+      href={menu.url}
+      passHref
+      style={{
+        width: "100%",
+      }}
+    >
+      <VStack
         p={4}
         bgColor={isMenuSelected ? "#00000060" : "transparent"}
         _hover={{
           bgColor: isMenuSelected ? "#00000060" : "#00000030",
         }}
         spacing="12px"
+        justifyContent="space-between"
       >
         <Image
           src={isMenuSelected ? menu.activeImageUrl : menu.imageUrl}
@@ -55,9 +66,9 @@ const MenuTile = ({ menu }: { menu: SideBarMenu }) => {
         >
           {menu.name}
         </Text>
-      </HStack>
+      </VStack>
     </Link>
   );
 };
 
-export default SideBar;
+export default NavBar;
