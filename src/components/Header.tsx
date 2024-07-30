@@ -1,31 +1,12 @@
-import {
-  Box,
-  HStack,
-  IconButton,
-  Input,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Popover,
-  PopoverContent,
-  PopoverProps,
-  PopoverTrigger,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
-
-import { Search } from "@emotion-icons/boxicons-regular/Search";
-import SearchTextInput from "./SearchTextInput";
+import { Box, HStack, Text } from "@chakra-ui/react";
 
 const Header = ({
-  searchText,
-  onSearchChange,
+  title,
+  actions,
 }: {
-  searchText: string;
-  onSearchChange: (e: string) => void;
+  title: string;
+  actions?: React.ReactNode;
 }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box
       w="100%"
@@ -41,49 +22,11 @@ const Header = ({
           fontWeight={500}
           lineHeight="1.2"
         >
-          Task Manager
+          {title}
         </Text>
-        <SearchTextInput
-          searchText={searchText}
-          onSearchTextChange={onSearchChange}
-          display={["none", null, "block"]}
-        />
-        <Box display={["block", null, "none"]}>
-          <SearchMenu
-            isOpen={isOpen}
-            onClose={onClose}
-            onOpen={onOpen}
-            searchText={searchText}
-            onSearchChange={onSearchChange}
-            placement="bottom-start"
-          />
-        </Box>
+        {actions}
       </HStack>
     </Box>
   );
 };
-
-const SearchMenu = ({
-  searchText,
-  onSearchChange,
-  ...props
-}: {
-  searchText: string;
-  onSearchChange: (e: string) => void;
-} & PopoverProps) => {
-  return (
-    <Popover {...props}>
-      <PopoverTrigger>
-        <Search size="25px" />
-      </PopoverTrigger>
-      <PopoverContent>
-        <SearchTextInput
-          searchText={searchText}
-          onSearchTextChange={onSearchChange}
-        />
-      </PopoverContent>
-    </Popover>
-  );
-};
-
 export default Header;

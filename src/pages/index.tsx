@@ -1,17 +1,14 @@
 "use client";
 
 import EmptyTask from "@/components/EmptyTask";
-import Header from "@/components/Header";
 import TaskCard from "@/components/TaskCard";
 import { dummyTaskList } from "@/components/utils";
 import {
   Box,
-  Center,
   IconButton,
-  Text,
   VStack,
-  chakra,
   useBreakpointValue,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { isEmpty } from "lodash";
 import Head from "next/head";
@@ -19,12 +16,15 @@ import Link from "next/link";
 import { Fragment, useState } from "react";
 import { AddCircle } from "@emotion-icons/fluentui-system-regular/AddCircle";
 import Layout from "@/components/Layout";
+import SearchMenuPopup from "@/components/SearchMenuPopup";
+import SearchTextInput from "@/components/SearchTextInput";
 
 const HomePage = () => {
   const [searchText, setSearchText] = useState<string>("");
   const filteredTasks = dummyTaskList.filter((task) =>
     task.title.toLowerCase().includes(searchText.toLowerCase())
   );
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const isTablet = useBreakpointValue({ base: true, md: false });
 
@@ -33,7 +33,28 @@ const HomePage = () => {
       <Head>
         <title>Home Page</title>
       </Head>
-      <Layout searchText={searchText} onSearchTextChange={setSearchText}>
+      <Layout
+        pageTitle="Task Manager"
+        headerActions={
+          <>
+            <SearchTextInput
+              searchText={searchText}
+              onSearchTextChange={setSearchText}
+              display={["none", null, "block"]}
+            />
+            <Box display={["block", null, "none"]}>
+              <SearchMenuPopup
+                isOpen={isOpen}
+                onClose={onClose}
+                onOpen={onOpen}
+                searchText={searchText}
+                onSearchChange={setSearchText}
+                placement="bottom-start"
+              />
+            </Box>
+          </>
+        }
+      >
         <>
           {isEmpty(filteredTasks) ? (
             <EmptyTask searchText={searchText} />

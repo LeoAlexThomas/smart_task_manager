@@ -1,5 +1,5 @@
 import  random from "lodash/random";
-import { PriorityLevelEnum, TaskInterface } from "./types/TaskInterface";
+import { PriorityLevelEnum, TaskInterface } from "./types/task";
 import dayjs from "dayjs";
 import { SideBarMenu } from "./types/common";
 

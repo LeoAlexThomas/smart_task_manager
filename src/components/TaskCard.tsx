@@ -6,7 +6,7 @@ import {
   VStack,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { TaskInterface } from "./types/TaskInterface";
+import { TaskInterface } from "./types/Task";
 import { getPriorityColor, getTaskPriorityLabel } from "./utils";
 import { Edit } from "@emotion-icons/boxicons-solid/Edit";
 import { DeleteOutline } from "@emotion-icons/material/DeleteOutline";

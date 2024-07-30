@@ -4,21 +4,22 @@ import SideBar from "./SideBar";
 import NavBar from "./NavBar";
 
 const Layout = ({
-  searchText,
-  onSearchTextChange,
+  pageTitle,
+  headerActions,
   children,
 }: {
-  searchText: string;
-  onSearchTextChange: (val: string) => void;
+  pageTitle: string;
+  headerActions?: React.ReactNode;
   children: React.ReactElement;
 }) => {
   return (
     <VStack alignItems="stretch" spacing={0}>
-      <Header searchText={searchText} onSearchChange={onSearchTextChange} />
+      <Header title={pageTitle} actions={headerActions} />
       <SimpleGrid
         templateColumns={["minmax(0,1fr)", null, "250px minmax(0,1fr)"]}
         spacing="12px"
         pb={["80px", null, 0]}
+        w="100%"
         maxW="1600px"
         mx="auto"
       >
