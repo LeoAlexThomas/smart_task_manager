@@ -13,3 +13,11 @@ export interface TaskInterface {
     location: string;
     isCompleted: boolean;
 }
+
+export interface CreateTaskInterface {
+    title: string;
+    description: string;
+    endDate: string; // ISO string
+    priorityLevel: PriorityLevelEnum| ""; // "" is for default value in form value
+    location: string;
+}
