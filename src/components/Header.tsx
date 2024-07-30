@@ -33,6 +33,7 @@ const Header = ({
       pos="sticky"
       top={0}
       bg="white"
+      zIndex={99}
     >
       <HStack maxW="1600px" mx="auto" justifyContent="space-between" p={4}>
         <Text
@@ -54,7 +55,7 @@ const Header = ({
             onOpen={onOpen}
             searchText={searchText}
             onSearchChange={onSearchChange}
-            placement="bottom"
+            placement="bottom-start"
           />
         </Box>
       </HStack>

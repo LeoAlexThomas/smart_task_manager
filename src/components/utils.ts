@@ -1,7 +1,7 @@
 import  random from "lodash/random";
-import  range from "lodash/range";
 import { PriorityLevelEnum, TaskInterface } from "./types/TaskInterface";
 import dayjs from "dayjs";
+import { SideBarMenu } from "./types/common";
 
 export const statesOfIndia: string[] =  [
     "Andhra Pradesh",
@@ -42,6 +42,26 @@ export const statesOfIndia: string[] =  [
     "Puducherry"
 ];
 
+export const menus: SideBarMenu[] = [
+  {
+    name: "Home",
+    url: "/",
+    imageUrl: "/images/home.svg",
+    activeImageUrl: "/images/activeHome.svg",
+  },
+  {
+    name: "Dashboard",
+    url: "/dashboard",
+    imageUrl: "/images/dashboard.svg",
+    activeImageUrl: "/images/activeDashboard.svg",
+  },
+  {
+    name: "Settings",
+    url: "/settings",
+    imageUrl: "/images/settings.svg",
+    activeImageUrl: "/images/activeSettings.svg",
+  },
+];
 
 export const getRandomPriorityEnum = (): PriorityLevelEnum => {
     const currentIndex = random(1, 3);

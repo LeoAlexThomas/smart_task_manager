@@ -25,11 +25,12 @@ const TaskCard = ({ task }: { task: TaskInterface }) => {
       p={4}
       justifyContent="space-between"
       alignItems="flex-start"
+      bgColor={isTaskCompleted ? "#efefef95" : "#ffffff"}
     >
       <Checkbox
         size={["md", null, "lg"]}
         colorScheme="green"
-        checked={isTaskCompleted}
+        isChecked={isTaskCompleted}
         mt={1}
       />
       <VStack alignItems="stretch">

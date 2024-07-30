@@ -39,11 +39,10 @@ const HomePage = () => {
             <EmptyTask searchText={searchText} />
           ) : (
             <VStack
-              maxW="1600px"
-              mx="auto"
               alignItems="stretch"
               p={4}
               spacing={["12px", null, "16px"]}
+              pb={["50px", null, 0]}
             >
               {filteredTasks.map((task) => (
                 <Fragment key={task.id}>
@@ -52,27 +51,28 @@ const HomePage = () => {
               ))}
             </VStack>
           )}
-          <Link
-            href={`/createTask/${
-              isEmpty(searchText) ? "" : `?title=${searchText}`
-            }`}
-            passHref
-            style={{
-              position: "fixed",
-              bottom: "20px",
-              right: "20px",
-            }}
+          <Box
+            position="fixed"
+            bottom={["90px", null, "20px"]}
+            right={["20px", null, null, null, null, "150px"]}
           >
-            <IconButton
-              aria-label="Add Task"
-              icon={
-                <AddCircle size={isTablet ? "25px" : "30px"} color="white" />
-              }
-              borderRadius="full"
-              size="md"
-              bgColor="blue.500"
-            />
-          </Link>
+            <Link
+              href={`/createTask/${
+                isEmpty(searchText) ? "" : `?title=${searchText}`
+              }`}
+              passHref
+            >
+              <IconButton
+                aria-label="Add Task"
+                icon={
+                  <AddCircle size={isTablet ? "25px" : "30px"} color="white" />
+                }
+                borderRadius="full"
+                size="md"
+                bgColor="blue.500"
+              />
+            </Link>
+          </Box>
         </>
       </Layout>
     </Box>
