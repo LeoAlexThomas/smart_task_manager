@@ -24,7 +24,15 @@ const Layout = ({
         mx="auto"
       >
         <SideBar />
-        <Box w="100%" maxW="1600px" mx="auto" pb={10} overflow="auto" h="92vh">
+        <Box
+          w="100%"
+          maxW="1600px"
+          mx="auto"
+          pb={10}
+          overflow="auto"
+          h={["100%", null, "92vh"]}
+          p={4}
+        >
           {children}
         </Box>
       </SimpleGrid>

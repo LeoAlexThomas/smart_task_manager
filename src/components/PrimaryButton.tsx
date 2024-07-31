@@ -6,6 +6,9 @@ const PrimaryButton = (props: ButtonProps) => {
       bgColor="blue.500"
       color="white"
       size={["md", null, "lg"]}
+      _hover={{
+        bgColor: "blue.600",
+      }}
       {...props}
     />
   );

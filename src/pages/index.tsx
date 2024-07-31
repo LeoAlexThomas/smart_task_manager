@@ -6,7 +6,7 @@ import { dummyTaskList } from "@/components/utils";
 import {
   Box,
   IconButton,
-  VStack,
+  SimpleGrid,
   useBreakpointValue,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -59,18 +59,17 @@ const HomePage = () => {
           {isEmpty(filteredTasks) ? (
             <EmptyTask searchText={searchText} />
           ) : (
-            <VStack
+            <SimpleGrid
+              columns={[1, 2, null, null, 3]}
               alignItems="stretch"
-              p={4}
-              spacing={["12px", null, "16px"]}
-              pb={["50px", null, 0]}
+              spacing="16px"
             >
               {filteredTasks.map((task) => (
                 <Fragment key={task.id}>
                   <TaskCard task={task} />
                 </Fragment>
               ))}
-            </VStack>
+            </SimpleGrid>
           )}
           <Box
             position="fixed"

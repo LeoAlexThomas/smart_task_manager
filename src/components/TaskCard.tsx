@@ -1,10 +1,11 @@
 import {
+  Box,
   Checkbox,
   HStack,
-  SimpleGrid,
   Text,
   VStack,
   useBreakpointValue,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { TaskInterface } from "./types/task";
 import { getPriorityColor, getTaskPriorityLabel } from "./utils";
@@ -12,46 +13,56 @@ import { Edit } from "@emotion-icons/boxicons-solid/Edit";
 import { DeleteOutline } from "@emotion-icons/material/DeleteOutline";
 import dayjs from "dayjs";
 import Link from "next/link";
+import ImageWithText from "./ImageWithText";
+import WarningModal from "./WarningModal";
 
 const TaskCard = ({ task }: { task: TaskInterface }) => {
   const isTablet = useBreakpointValue({ base: true, md: false });
   const isTaskCompleted = task.isCompleted;
+  const { isOpen, onClose, onOpen } = useDisclosure();
+
+  const handleDelete = () => {
+    console.log("Task deleted api called");
+    onClose();
+  };
+
   return (
-    <SimpleGrid
-      templateColumns={["15px 1fr", null, "25px 1fr"]}
-      spacing={["12px", null, "16px"]}
+    <Box
       boxShadow="0px 0px 2px 1px #00000050"
       borderRadius="12px"
       p={4}
       justifyContent="space-between"
       alignItems="flex-start"
-      bgColor={isTaskCompleted ? "#efefef95" : "#ffffff"}
+      bgGradient={`linear(to-tr, #e1e1e195, #ffffff)`}
+      _hover={{
+        boxShadow: "0px 0px 2px 2px #00000050",
+      }}
     >
-      <Checkbox
-        size={["md", null, "lg"]}
-        colorScheme="green"
-        isChecked={isTaskCompleted}
-        mt={1}
+      <WarningModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onYes={handleDelete}
+        message={`Are you sure to delete ${task.title}?`}
       />
-      <VStack alignItems="stretch">
+      <VStack alignItems="stretch" spacing={3}>
         <HStack alignItems="flex-end" justifyContent={["space-between"]}>
-          <Text
-            fontSize={["16px", null, "20px"]}
-            fontWeight={500}
-            lineHeight="1.2"
-            noOfLines={1}
-            textOverflow="ellipsis"
-          >
-            {task.title}
-          </Text>
-          <Text
-            fontSize={["10px", null, "12px"]}
-            fontWeight={500}
-            lineHeight="1.4"
-            whiteSpace="nowrap"
-          >
-            ({dayjs(task.endDate).format("DD MMM YYYY hh:mm A")})
-          </Text>
+          <Link href={`/task/${task.id}/`}>
+            <Text
+              fontSize={["16px", null, "20px"]}
+              fontWeight={500}
+              lineHeight="1.2"
+              noOfLines={1}
+              textOverflow="ellipsis"
+            >
+              {task.title}
+            </Text>
+          </Link>
+          <Checkbox
+            size={["md", null, "lg"]}
+            colorScheme="green"
+            isChecked={isTaskCompleted}
+            mt={1}
+          />
         </HStack>
         <Text
           fontSize={["10px", null, "12px"]}
@@ -62,9 +73,20 @@ const TaskCard = ({ task }: { task: TaskInterface }) => {
         >
           {task.description}
         </Text>
+        <ImageWithText
+          imageSrc="/images/calendar.svg"
+          text={dayjs(task.endDate).format("DD MMM YYYY")}
+          textProps={{
+            fontSize: ["12px", null, "12px"],
+            fontWeight: 500,
+            lineHeight: "1.4",
+            whiteSpace: "nowrap",
+          }}
+        />
+
         <HStack justifyContent="space-between">
           <Text
-            fontSize={["10px", null, "12px"]}
+            fontSize={["12px", null, "12px"]}
             fontWeight={500}
             lineHeight="1.2"
             color={getPriorityColor(task.priorityLevel)}
@@ -84,11 +106,16 @@ const TaskCard = ({ task }: { task: TaskInterface }) => {
             >
               <Edit size={isTablet ? "20px" : "25px"} color="blue" />
             </Link>
-            <DeleteOutline size={isTablet ? "20px" : "25px"} color="red" />
+            <DeleteOutline
+              size={isTablet ? "20px" : "25px"}
+              color="#ff5b5b"
+              onClick={onOpen}
+              cursor="pointer"
+            />
           </HStack>
         </HStack>
       </VStack>
-    </SimpleGrid>
+    </Box>
   );
 };
 

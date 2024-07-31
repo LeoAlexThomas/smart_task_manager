@@ -89,11 +89,11 @@ export const getTaskPriorityLabel = (priority: PriorityLevelEnum): string => {
 export const getPriorityColor = (priority: PriorityLevelEnum): string => {
     switch (priority) {
         case PriorityLevelEnum.low:
-            return "green"; 
+            return "#44bb44"; 
         case PriorityLevelEnum.medium:
-            return "blue";           
+            return "#4e4ebb";           
         default:
-            return "red";
+            return "#ff5b5b";
     }
 }
 

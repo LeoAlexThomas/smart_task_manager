@@ -57,7 +57,7 @@ function TextareaField<T extends FieldValues>({
         >
           {title}{" "}
           {Boolean(rules.required) ? (
-            <chakra.span color="red">*</chakra.span>
+            <chakra.span color="#ff5b5b">*</chakra.span>
           ) : (
             ""
           )}
