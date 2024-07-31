@@ -1,4 +1,6 @@
-import { Box, HStack, Text } from "@chakra-ui/react";
+import { Box, HStack, IconButton, SimpleGrid, Text } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { ArrowIosBack } from "@emotion-icons/evaicons-solid/ArrowIosBack";
 
 const Header = ({
   title,
@@ -7,6 +9,12 @@ const Header = ({
   title: string;
   actions?: React.ReactNode;
 }) => {
+  const router = useRouter();
+  const showBack = router.asPath !== "/";
+  const handleBack = () => {
+    router.back();
+  };
+
   return (
     <Box
       w="100%"
@@ -17,13 +25,33 @@ const Header = ({
       zIndex={99}
     >
       <HStack maxW="1600px" mx="auto" justifyContent="space-between" p={4}>
-        <Text
-          fontSize={["16px", null, "24px"]}
-          fontWeight={500}
-          lineHeight="1.2"
+        <SimpleGrid
+          templateColumns={
+            showBack
+              ? ["15px minmax(0, 1fr)", "25px minmax(0, 1fr)"]
+              : "minmax(0, 1fr)"
+          }
+          spacing={[4, null, 6]}
+          alignItems="center"
         >
-          {title}
-        </Text>
+          {showBack && (
+            <IconButton
+              aria-label="back"
+              icon={<ArrowIosBack size="25px" />}
+              onClick={handleBack}
+              bgColor="transparent"
+              _hover={{}}
+              _active={{}}
+            />
+          )}
+          <Text
+            fontSize={["20px", null, "24px"]}
+            fontWeight={500}
+            lineHeight="1.2"
+          >
+            {title}
+          </Text>
+        </SimpleGrid>
         {actions}
       </HStack>
     </Box>
