@@ -2,6 +2,11 @@ import  random from "lodash/random";
 import { PriorityLevelEnum, TaskInterface } from "./types/task";
 import dayjs from "dayjs";
 import { SideBarMenu } from "./types/common";
+import Cookies from "js-cookie";
+
+export const userTokenCookieName = "userToken";
+
+export const unAutherizedPath = ["/signIn/"]
 
 export const statesOfIndia: string[] =  [
     "Andhra Pradesh",
@@ -62,6 +67,14 @@ export const menus: SideBarMenu[] = [
     activeImageUrl: "/images/activeSettings.svg",
   },
 ];
+
+export const setUserToken = (userToken?: string) => {
+    if(!userToken) {
+      return;
+    }
+    Cookies.set(userTokenCookieName, userToken)
+
+}
 
 export const getRandomPriorityEnum = (): PriorityLevelEnum => {
     const currentIndex = random(1, 3);
