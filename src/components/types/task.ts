@@ -4,15 +4,32 @@ export enum PriorityLevelEnum {
     high = "high",
 }
 
-export interface TaskInterface {
+
+
+export interface CompletedTaskInterface {
     id: number;
     title: string;
     description: string;
+    createdAt: string;
     endDate: string;
     priorityLevel: PriorityLevelEnum;
     location: string;
-    isCompleted: boolean;
+    isCompleted: true;
+    completedDate: string;
 }
+
+export interface PendingsTaskInterface {
+    id: number;
+    title: string;
+    description: string;
+    createdAt: string;
+    endDate: string;
+    priorityLevel: PriorityLevelEnum;
+    location: string;
+    isCompleted: false;
+}
+
+export type TaskInterface = CompletedTaskInterface | PendingsTaskInterface;
 
 export interface CreateTaskInterface {
     title: string;
