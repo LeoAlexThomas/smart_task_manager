@@ -1,23 +1,20 @@
-"use client";
-
 import EmptyTask from "@/components/EmptyTask";
-import TaskCard from "@/components/TaskCard";
 import { dummyTaskList } from "@/components/utils";
 import {
   Box,
   IconButton,
-  SimpleGrid,
   useBreakpointValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { isEmpty } from "lodash";
 import Head from "next/head";
 import Link from "next/link";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { AddCircle } from "@emotion-icons/fluentui-system-regular/AddCircle";
 import Layout from "@/components/Layout";
 import SearchMenuPopup from "@/components/SearchMenuPopup";
 import SearchTextInput from "@/components/SearchTextInput";
+import TaskList from "@/components/TaskList";
 
 const HomePage = () => {
   const [searchText, setSearchText] = useState<string>("");
@@ -59,17 +56,7 @@ const HomePage = () => {
           {isEmpty(filteredTasks) ? (
             <EmptyTask searchText={searchText} />
           ) : (
-            <SimpleGrid
-              columns={[1, 2, null, null, 3]}
-              alignItems="stretch"
-              spacing="16px"
-            >
-              {filteredTasks.map((task) => (
-                <Fragment key={task.id}>
-                  <TaskCard task={task} />
-                </Fragment>
-              ))}
-            </SimpleGrid>
+            <TaskList tasks={filteredTasks} />
           )}
           <Box
             position="fixed"
