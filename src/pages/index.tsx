@@ -15,7 +15,7 @@ import FloatingActionButton from "@/components/FloatingActionButton";
 const HomePage = () => {
   const [searchText, setSearchText] = useState<string>("");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { getTodos } = useFirebaseDBActions();
+  const { getTasks } = useFirebaseDBActions();
 
   return (
     <Box bg="white" h="100vh">
@@ -46,8 +46,9 @@ const HomePage = () => {
       >
         <>
           <WithLoader
-            apiFn={() => getTodos(searchText)}
+            apiFn={() => getTasks(searchText)}
             dependencies={searchText}
+            updateLatestData={(val) => val}
           >
             {({ data: tasks }: { data: TaskInterface[] }) => {
               return (

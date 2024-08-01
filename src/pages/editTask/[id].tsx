@@ -1,40 +1,47 @@
 import Layout from "@/components/Layout";
 import { CreateTaskInterface, TaskInterface } from "@/components/types/task";
-import { dummyTaskList } from "@/components/utils";
 import dayjs from "dayjs";
-import { isArray, isNil } from "lodash";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import TaskForm from "@/components/TaskForm";
+import useApi from "@/components/hook/useApi";
+import useCustomToast, {
+  ToastStatusEnum,
+} from "@/components/hook/useCustomToast";
+import useFirebaseDBActions from "@/components/service/firebaseDBService";
+import WithLoader from "@/components/WithLoader";
 
 const EditTask = () => {
   const router = useRouter();
-  const [selectedTask, setSelectedTask] = useState<TaskInterface | undefined>();
-  useEffect(() => {
-    if (!router.isReady) {
-      return;
-    }
-    const queryTaskId = router.query.id;
-    if (isNil(queryTaskId)) {
-      return;
-    }
-    const selectedQueryTaskId = isArray(queryTaskId)
-      ? queryTaskId[0]
-      : queryTaskId;
+  const { getTaskById, editTask } = useFirebaseDBActions();
+  const { makeApiCall } = useApi();
+  const { showToast } = useCustomToast();
+  const queryTaskId = String(router.query.id ?? "");
 
-    const querySelectedTask = dummyTaskList.find(
-      (task) => task.id.toString() === selectedQueryTaskId
-    );
-    if (isNil(querySelectedTask)) {
-      router.replace("/createTask/");
-      return;
-    }
-    setSelectedTask(querySelectedTask);
-  }, [router.isReady]);
-
-  const onSubmit = (values: CreateTaskInterface) => {
-    console.log("onSubmit: ", values);
+  const onSubmit = (values: CreateTaskInterface, taskId: string) => {
+    makeApiCall({
+      apiFn: () => editTask(taskId, values),
+      onSuccess: (res) => {
+        if (res.isSuccess) {
+          showToast({
+            title: res.message,
+            status: ToastStatusEnum.success,
+          });
+          router.push("/");
+          return;
+        }
+        showToast({
+          title: res.message,
+          status: ToastStatusEnum.error,
+        });
+      },
+      onFailure: (err) => {
+        showToast({
+          title: err.message ?? "Something went wrong",
+          status: ToastStatusEnum.error,
+        });
+      },
+    });
   };
 
   return (
@@ -43,20 +50,33 @@ const EditTask = () => {
         <title>Edit Task</title>
       </Head>
       <Layout pageTitle="Edit Task">
-        <TaskForm
-          defaultValues={
-            isNil(selectedTask)
-              ? undefined
-              : {
-                  title: selectedTask.title,
-                  description: selectedTask.description,
-                  endDate: dayjs(selectedTask.endDate).format("YYYY-MM-DD"),
-                  location: selectedTask.location,
-                  priorityLevel: selectedTask.priorityLevel,
-                }
-          }
-          onSubmit={onSubmit}
-        />
+        <WithLoader
+          apiFn={() => getTaskById(queryTaskId ?? "")}
+          updateLatestData={(val) => {
+            const task = val.find(
+              (task: TaskInterface) => task.id === queryTaskId
+            );
+            if (!task) {
+              return val;
+            }
+            return task;
+          }}
+        >
+          {({ data }: { data: TaskInterface }) => {
+            return (
+              <TaskForm
+                defaultValues={{
+                  title: data.title,
+                  description: data.description,
+                  endDate: dayjs(data.endDate).format("YYYY-MM-DD"),
+                  location: data.location,
+                  priorityLevel: data.priorityLevel,
+                }}
+                onSubmit={(val) => onSubmit(val, data.id)}
+              />
+            );
+          }}
+        </WithLoader>
       </Layout>
     </>
   );

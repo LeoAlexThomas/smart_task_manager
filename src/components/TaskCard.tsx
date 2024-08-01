@@ -15,15 +15,66 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import ImageWithText from "./ImageWithText";
 import WarningModal from "./WarningModal";
+import useFirebaseDBActions from "./service/firebaseDBService";
+import useApi from "./hook/useApi";
+import useCustomToast, { ToastStatusEnum } from "./hook/useCustomToast";
 
 const TaskCard = ({ task }: { task: TaskInterface }) => {
   const isTablet = useBreakpointValue({ base: true, md: false });
   const isTaskCompleted = task.isCompleted;
+  const { makeApiCall } = useApi();
+  const { showToast } = useCustomToast();
+  const { deleteTask, updateTaskStatus } = useFirebaseDBActions();
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const handleDelete = () => {
-    console.log("Task deleted api called");
-    onClose();
+    makeApiCall({
+      apiFn: () => deleteTask(task.id),
+      onSuccess: (res) => {
+        onClose();
+        if (res.isSuccess) {
+          showToast({
+            title: res.message,
+            status: ToastStatusEnum.success,
+          });
+          return;
+        }
+        showToast({ title: res.message, status: ToastStatusEnum.error });
+      },
+      onFailure: (err) => {
+        showToast({
+          title: err.message ?? "Something went wrong",
+          status: ToastStatusEnum.error,
+        });
+      },
+    });
+  };
+
+  const handleTaskStatus = (isCompleted: boolean) => {
+    makeApiCall({
+      apiFn: () =>
+        updateTaskStatus(task.id, {
+          ...task,
+          isCompleted,
+          completedDate: isCompleted ? dayjs().toISOString() : null,
+        }),
+      onSuccess: (res) => {
+        if (res.isSuccess) {
+          showToast({
+            title: res.message,
+            status: ToastStatusEnum.success,
+          });
+          return;
+        }
+        showToast({ title: res.message, status: ToastStatusEnum.error });
+      },
+      onFailure: (err) => {
+        showToast({
+          title: err.message ?? "Something went wrong",
+          status: ToastStatusEnum.error,
+        });
+      },
+    });
   };
 
   return (
@@ -61,6 +112,7 @@ const TaskCard = ({ task }: { task: TaskInterface }) => {
             size={["md", null, "lg"]}
             colorScheme="green"
             isChecked={isTaskCompleted}
+            onChange={(e) => handleTaskStatus(e.target.checked)}
             mt={1}
           />
         </HStack>
