@@ -4,3 +4,8 @@ export interface SideBarMenu {
     imageUrl: string;
     activeImageUrl: string;
 }
+
+export interface ApiResponse {
+    isSuccess: boolean;
+    message: string;
+}
