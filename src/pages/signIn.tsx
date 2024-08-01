@@ -1,43 +1,28 @@
-import UserSignIn from "@/components/userAuth/UserSignIn";
-import UserSignUp from "@/components/userAuth/UserSignUp";
-import {
-  Center,
-  Image,
-  SimpleGrid,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-} from "@chakra-ui/react";
+import UserAuthenticationTabs from "@/components/userAuth/UserAuthenticationTabs";
+import { Box, Center, Image, SimpleGrid } from "@chakra-ui/react";
 
 const SignIn = () => {
   return (
-    <SimpleGrid columns={[1, null, 2]}>
-      <Image src="/images/intro.webp" alt="intro" w="100%" h="100%" />
-      <UserAuthentication />
+    <SimpleGrid h="100vh" templateColumns={["1fr", null, "1fr 1px 1fr"]}>
+      <Center display={["none", null, "flex"]}>
+        <Image
+          src="/images/intro.webp"
+          alt="intro"
+          w="100%"
+          h="100%"
+          maxW="700px"
+          style={{
+            aspectRatio: 1,
+            objectFit: "contain",
+          }}
+        />
+      </Center>
+      <Box
+        bgGradient="linear(to-b,  #e1e1e1,#00000050, #e1e1e1)"
+        display={["none", null, "block"]}
+      />
+      <UserAuthenticationTabs />
     </SimpleGrid>
-  );
-};
-
-const UserAuthentication = () => {
-  return (
-    <Center>
-      <Tabs>
-        <TabList>
-          <Tab>Sign In</Tab>
-          <Tab>Sign Up</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>
-            <UserSignIn />
-          </TabPanel>
-          <TabPanel>
-            <UserSignUp />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
-    </Center>
   );
 };
 

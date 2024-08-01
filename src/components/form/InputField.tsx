@@ -72,9 +72,7 @@ function InputField<T extends FieldValues>({
             {...register(name, rules)}
           />
           <FormErrorMessage>
-            {error?.message ?? error?.type === "required"
-              ? "This field is required"
-              : "Something went wrong"}
+            {error ? "This field is required" : ""}
           </FormErrorMessage>
         </Box>
       </VStack>

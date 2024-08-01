@@ -1,6 +1,7 @@
 import { Box, HStack, IconButton, SimpleGrid, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { ArrowIosBack } from "@emotion-icons/evaicons-solid/ArrowIosBack";
+import UserProfile from "./UserProfile";
 
 const Header = ({
   title,
@@ -52,7 +53,9 @@ const Header = ({
             {title}
           </Text>
         </SimpleGrid>
-        {actions}
+        <HStack>
+          {actions} <UserProfile />
+        </HStack>
       </HStack>
     </Box>
   );
