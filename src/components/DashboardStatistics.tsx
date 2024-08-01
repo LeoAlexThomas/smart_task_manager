@@ -21,8 +21,12 @@ import {
   LinearScale,
 } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
-import { dummyTaskList } from "./utils";
 import dayjs from "dayjs";
+import isEmpty from "lodash/isEmpty";
+import WithLoader from "./WithLoader";
+import useFirebaseDBActions from "./service/firebaseDBService";
+import { TaskInterface } from "./types/task";
+import EmptyTask from "./EmptyTask";
 
 ChartJS.register(
   ArcElement,
@@ -35,33 +39,45 @@ ChartJS.register(
 );
 
 const DashboardStatistics = () => {
+  const { getTasks } = useFirebaseDBActions();
+
   return (
-    <Wrap
-      spacing="16px"
-      spacingY={["16px", null, null, "24px"]}
-      alignItems="stretch"
-      justify={["center", null, null, "space-around"]}
-    >
-      <WrapItem>
-        <SectionWithHeader title="Overall Task Details">
-          <OverallTaskChart />
-        </SectionWithHeader>
-      </WrapItem>
-      <WrapItem>
-        <SectionWithHeader title="Completed On / Before Due Date Task">
-          <CompletedOnDueDateTaskChart />
-        </SectionWithHeader>
-      </WrapItem>
-    </Wrap>
+    <WithLoader apiFn={() => getTasks()} updateLatestData={(val) => val}>
+      {({ data: tasks }: { data: TaskInterface[] }) => {
+        return (
+          <>
+            {isEmpty(tasks) ? (
+              <EmptyTask />
+            ) : (
+              <Wrap
+                spacing="16px"
+                spacingY={["16px", null, null, "24px"]}
+                alignItems="stretch"
+                justify={["center", null, null, "space-around"]}
+              >
+                <WrapItem>
+                  <SectionWithHeader title="Overall Task Details">
+                    <OverallTaskChart tasks={tasks} />
+                  </SectionWithHeader>
+                </WrapItem>
+                <WrapItem>
+                  <SectionWithHeader title="Completed On / Before Due Date Task">
+                    <CompletedOnDueDateTaskChart tasks={tasks} />
+                  </SectionWithHeader>
+                </WrapItem>
+              </Wrap>
+            )}
+          </>
+        );
+      }}
+    </WithLoader>
   );
 };
 
-const OverallTaskChart = () => {
+const OverallTaskChart = ({ tasks }: { tasks: TaskInterface[] }) => {
   const isMobile = useBreakpointValue({ base: true, sm: false });
-  const completedTaskCount = dummyTaskList.filter(
-    (task) => task.isCompleted
-  ).length;
-  const pendingTaskCount = dummyTaskList.length - completedTaskCount;
+  const completedTaskCount = tasks.filter((task) => task.isCompleted).length;
+  const pendingTaskCount = tasks.length - completedTaskCount;
   const dashboardOverallStatistics: {
     data: ChartData<"doughnut">;
     options: ChartOptions<"doughnut">;
@@ -96,9 +112,9 @@ const OverallTaskChart = () => {
   );
 };
 
-const CompletedOnDueDateTaskChart = () => {
+const CompletedOnDueDateTaskChart = ({ tasks }: { tasks: TaskInterface[] }) => {
   const isMobile = useBreakpointValue({ base: true, sm: false });
-  const completedTasks = dummyTaskList.filter((task) => task.isCompleted);
+  const completedTasks = tasks.filter((task) => task.isCompleted);
   const completedTaskCount = completedTasks.length;
   const completedOnDueDateTaskCount = completedTasks.filter((task) =>
     dayjs(task.completedDate).isBefore(task.endDate)
