@@ -1,12 +1,18 @@
 import DashboardStatistics from "@/components/DashboardStatistics";
+import EmptyTask from "@/components/EmptyTask";
 import Layout from "@/components/Layout";
+import useFirebaseDBActions from "@/components/service/firebaseDBService";
 import TaskList from "@/components/TaskList";
-import { dummyTaskList } from "@/components/utils";
+import { TaskInterface } from "@/components/types/task";
+import WithLoader from "@/components/WithLoader";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@chakra-ui/react";
 import dayjs from "dayjs";
+import isEmpty from "lodash/isEmpty";
 import Head from "next/head";
 
 const Dashboard = () => {
+  const { getTasks } = useFirebaseDBActions();
+
   return (
     <>
       <Head>
@@ -50,21 +56,66 @@ const Dashboard = () => {
               <DashboardStatistics />
             </TabPanel>
             <TabPanel px={0}>
-              <TaskList
-                tasks={dummyTaskList.filter((task) => task.isCompleted)}
-              />
+              <WithLoader
+                apiFn={() => getTasks()}
+                updateLatestData={(val) => val}
+              >
+                {({ data: tasks }: { data: TaskInterface[] }) => {
+                  return (
+                    <>
+                      {isEmpty(tasks) ? (
+                        <EmptyTask />
+                      ) : (
+                        <TaskList
+                          tasks={tasks.filter((task) => task.isCompleted)}
+                        />
+                      )}
+                    </>
+                  );
+                }}
+              </WithLoader>
             </TabPanel>
             <TabPanel px={0}>
-              <TaskList
-                tasks={dummyTaskList.filter((task) => !task.isCompleted)}
-              />
+              <WithLoader
+                apiFn={() => getTasks()}
+                updateLatestData={(val) => val}
+              >
+                {({ data: tasks }: { data: TaskInterface[] }) => {
+                  return (
+                    <>
+                      {isEmpty(tasks) ? (
+                        <EmptyTask />
+                      ) : (
+                        <TaskList
+                          tasks={tasks.filter((task) => !task.isCompleted)}
+                        />
+                      )}
+                    </>
+                  );
+                }}
+              </WithLoader>
             </TabPanel>
             <TabPanel px={0}>
-              <TaskList
-                tasks={dummyTaskList.filter((task) =>
-                  dayjs(task.endDate).isAfter(dayjs())
-                )}
-              />
+              <WithLoader
+                apiFn={() => getTasks()}
+                updateLatestData={(val) => val}
+              >
+                {({ data: tasks }: { data: TaskInterface[] }) => {
+                  return (
+                    <>
+                      {isEmpty(tasks) ? (
+                        <EmptyTask />
+                      ) : (
+                        <TaskList
+                          tasks={tasks.filter((task) =>
+                            dayjs(task.endDate).isAfter(dayjs())
+                          )}
+                        />
+                      )}
+                    </>
+                  );
+                }}
+              </WithLoader>
             </TabPanel>
           </TabPanels>
         </Tabs>

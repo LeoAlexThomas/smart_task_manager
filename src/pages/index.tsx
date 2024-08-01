@@ -1,29 +1,21 @@
 import EmptyTask from "@/components/EmptyTask";
-import { dummyTaskList } from "@/components/utils";
-import {
-  Box,
-  IconButton,
-  useBreakpointValue,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, useDisclosure } from "@chakra-ui/react";
 import { isEmpty } from "lodash";
 import Head from "next/head";
-import Link from "next/link";
 import { useState } from "react";
-import { AddCircle } from "@emotion-icons/fluentui-system-regular/AddCircle";
 import Layout from "@/components/Layout";
 import SearchMenuPopup from "@/components/SearchMenuPopup";
 import SearchTextInput from "@/components/SearchTextInput";
 import TaskList from "@/components/TaskList";
+import WithLoader from "@/components/WithLoader";
+import useFirebaseDBActions from "@/components/service/firebaseDBService";
+import { TaskInterface } from "@/components/types/task";
+import FloatingActionButton from "@/components/FloatingActionButton";
 
 const HomePage = () => {
   const [searchText, setSearchText] = useState<string>("");
-  const filteredTasks = dummyTaskList.filter((task) =>
-    task.title.toLowerCase().includes(searchText.toLowerCase())
-  );
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const isTablet = useBreakpointValue({ base: true, md: false });
+  const { getTasks } = useFirebaseDBActions();
 
   return (
     <Box bg="white" h="100vh">
@@ -53,36 +45,29 @@ const HomePage = () => {
         }
       >
         <>
-          {isEmpty(filteredTasks) ? (
-            <EmptyTask searchText={searchText} />
-          ) : (
-            <TaskList tasks={filteredTasks} />
-          )}
-          <Box
-            position="fixed"
-            bottom={["90px", null, "20px"]}
-            right={["20px", null, null, null, null, "150px"]}
+          <WithLoader
+            apiFn={() => getTasks(searchText)}
+            dependencies={searchText}
+            updateLatestData={(val) => val}
           >
-            <Link
-              href={`/createTask/${
-                isEmpty(searchText) ? "" : `?title=${searchText}`
-              }`}
-              passHref
-            >
-              <IconButton
-                aria-label="Add Task"
-                icon={
-                  <AddCircle size={isTablet ? "25px" : "30px"} color="white" />
-                }
-                borderRadius="full"
-                size="md"
-                bgColor="blue.500"
-                _hover={{
-                  bgColor: "blue.600",
-                }}
-              />
-            </Link>
-          </Box>
+            {({ data: tasks }: { data: TaskInterface[] }) => {
+              return (
+                <>
+                  {isEmpty(tasks) ? (
+                    <EmptyTask searchText={searchText} />
+                  ) : (
+                    <TaskList tasks={tasks} />
+                  )}
+                </>
+              );
+            }}
+          </WithLoader>
+
+          <FloatingActionButton
+            pageLink={`/createTask/${
+              isEmpty(searchText) ? "" : `?title=${searchText}`
+            }`}
+          />
         </>
       </Layout>
     </Box>

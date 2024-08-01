@@ -5,6 +5,11 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import TaskForm from "@/components/TaskForm";
+import useCustomToast, {
+  ToastStatusEnum,
+} from "@/components/hook/useCustomToast";
+import useFirebaseDBActions from "@/components/service/firebaseDBService";
+import useApi from "@/components/hook/useApi";
 
 const defaultTaskValues: CreateTaskInterface = {
   title: "",
@@ -16,7 +21,9 @@ const defaultTaskValues: CreateTaskInterface = {
 
 const CreateTask = () => {
   const router = useRouter();
-
+  const { makeApiCall } = useApi();
+  const { showToast } = useCustomToast();
+  const { addTask } = useFirebaseDBActions();
   const [title, setTitle] = useState<string | undefined>();
 
   useEffect(() => {
@@ -30,8 +37,30 @@ const CreateTask = () => {
     setTitle(isArray(queryTitle) ? queryTitle[0] : queryTitle);
   }, [router.isReady]);
 
-  const onSubmit = (values: CreateTaskInterface) => {
-    console.log("onSubmit: ", values);
+  const onSubmit = async (values: CreateTaskInterface) => {
+    makeApiCall({
+      apiFn: () => addTask(values),
+      onSuccess: (res) => {
+        if (res.isSuccess) {
+          showToast({
+            title: res.message,
+            status: ToastStatusEnum.success,
+          });
+          router.push("/");
+          return;
+        }
+        showToast({
+          title: res.message,
+          status: ToastStatusEnum.error,
+        });
+      },
+      onFailure: (err) => {
+        showToast({
+          title: err.message ?? "Something went wrong",
+          status: ToastStatusEnum.error,
+        });
+      },
+    });
   };
 
   return (
