@@ -59,12 +59,6 @@ export const menus: SideBarMenu[] = [
     imageUrl: "/images/dashboard.svg",
     activeImageUrl: "/images/activeDashboard.svg",
   },
-  {
-    name: "Settings",
-    url: "/settings",
-    imageUrl: "/images/settings.svg",
-    activeImageUrl: "/images/activeSettings.svg",
-  },
 ];
 
 export const setUserToken = (userToken?: string) => {
