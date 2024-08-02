@@ -60,7 +60,7 @@ const DashboardStatistics = () => {
               </SectionWithHeader>
             </WrapItem>
             <WrapItem>
-              <SectionWithHeader title="Completed On / Before Due Date Task">
+              <SectionWithHeader title="Task Completion On Time">
                 <CompletedOnDueDateTaskChart tasks={tasks} />
               </SectionWithHeader>
             </WrapItem>
@@ -123,7 +123,7 @@ const CompletedOnDueDateTaskChart = ({ tasks }: { tasks: TaskInterface[] }) => {
     options: ChartOptions<"doughnut">;
   } = {
     data: {
-      labels: ["Not Completed On-time", "Completed On-time"],
+      labels: ["Not On-time", "On-time"],
       datasets: [
         {
           data: [completedNotOnDueDateTaskCount, completedOnDueDateTaskCount],
