@@ -1,40 +1,33 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Smart Task Manager
 
-## Getting Started
+## About
 
-First, run the development server:
+This project is all about adding, modifying, and deleting tasks. The design is simple, with added GIFs and charts. It is *responsive* from '342px' to 4K screen sizes.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This website features **user authentication** & **Real-time updates**, users can register and log in using an email address. Users can retrieve data from different devices and also receive real-time updates for tasks. [click here for video](https://drive.google.com/file/d/1yUGWg0EiKaEoaQ9P022HuVVfrglqNiqL/view?usp=sharing)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> [!NOTE]
+> **This project is built using the latest version of NextJS with React. I used *Firebase Auth* for authentication, *Firebase Firestore* for CRUD operations and real-time updates, *Chakra-UI* for components and inline style, *chart.js* for chart representation, and *dayjs* for handling date operations.** 
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Instruction
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+1. Clone or download the repo from this [link](https://github.com/LeoAlexThomas/smart_task_manager/) and navigate to the project location in the terminal.
+2. After step 1, `run npm install` to install all dependencies.
+3. Run `npm run build` to build the project.
+4. Run `npm start` to start the project.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Completed Points
 
-## Learn More
+1. Added HomeScreen, Task detailed screen, Add & Edit Screen and Dashboard Screen.
+2. Integrated third-party libraries like *Firebase*, *chat-js*.
+3. Maintained Component-based architecture in this project.
+4. Used JWT for user authentication.
+5. Implemented real-time updates.
+6. Implemented a feature to sync tasks with a cloud service Firebase Firestore.
 
-To learn more about Next.js, take a look at the following resources:
+## Pending Points
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. Not used state management library; instead, used Providers.
+2. Settings for dark/light mode and notification preferences, GitHub CI/CD, and map functionality for task were not implemented due to time constraints.
+3. Performance Insight and machine learning generated points.
