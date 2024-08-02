@@ -54,7 +54,7 @@ const HomePage = () => {
               return (
                 <>
                   {isEmpty(tasks) ? (
-                    <EmptyTask searchText={searchText} />
+                    <EmptyTask searchText={searchText} showAddLink />
                   ) : (
                     <TaskList tasks={tasks} />
                   )}

@@ -69,7 +69,7 @@ const Dashboard = () => {
               >
                 {({ data: tasks }: { data: TaskInterface[] }) => {
                   if (isEmpty(tasks)) {
-                    return <EmptyTask />;
+                    return <EmptyTask showAddLink h="50vh" />;
                   }
                   const completedTasks = tasks.filter(
                     (task) => task.isCompleted
@@ -78,6 +78,7 @@ const Dashboard = () => {
                     return (
                       <EmptyTask
                         message={<Text>Tasks are not completed</Text>}
+                        h="50vh"
                       />
                     );
                   }
@@ -92,14 +93,17 @@ const Dashboard = () => {
               >
                 {({ data: tasks }: { data: TaskInterface[] }) => {
                   if (isEmpty(tasks)) {
-                    return <EmptyTask />;
+                    return <EmptyTask showAddLink h="50vh" />;
                   }
                   const pendingTasks = tasks.filter(
                     (task) => !task.isCompleted
                   );
                   if (isEmpty(pendingTasks)) {
                     return (
-                      <EmptyTask message={<Text>No Task are pending</Text>} />
+                      <EmptyTask
+                        message={<Text>No Task are pending</Text>}
+                        h="50vh"
+                      />
                     );
                   }
                   return <TaskList tasks={pendingTasks} />;
@@ -112,21 +116,22 @@ const Dashboard = () => {
                 updateLatestData={(val) => val}
               >
                 {({ data: tasks }: { data: TaskInterface[] }) => {
-                  return (
-                    <>
-                      {isEmpty(tasks) ? (
-                        <EmptyTask />
-                      ) : (
-                        <TaskList
-                          tasks={tasks.filter(
-                            (task) =>
-                              dayjs(task.endDate).isAfter(dayjs()) &&
-                              !task.isCompleted
-                          )}
-                        />
-                      )}
-                    </>
+                  if (isEmpty(tasks)) {
+                    return <EmptyTask showAddLink h="50vh" />;
+                  }
+                  const upcomingTasks = tasks.filter(
+                    (task) =>
+                      dayjs(task.endDate).isAfter(dayjs()) && !task.isCompleted
                   );
+                  if (isEmpty(upcomingTasks)) {
+                    return (
+                      <EmptyTask
+                        message={<Text>There no upcoming tasks</Text>}
+                        h="50vh"
+                      />
+                    );
+                  }
+                  return <TaskList tasks={upcomingTasks} />;
                 }}
               </WithLoader>
             </TabPanel>

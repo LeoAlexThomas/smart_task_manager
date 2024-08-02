@@ -44,30 +44,27 @@ const DashboardStatistics = () => {
   return (
     <WithLoader apiFn={() => getTasks()} updateLatestData={(val) => val}>
       {({ data: tasks }: { data: TaskInterface[] }) => {
+        if (isEmpty(tasks)) {
+          return <EmptyTask showAddLink h="50vh" />;
+        }
         return (
-          <>
-            {isEmpty(tasks) ? (
-              <EmptyTask />
-            ) : (
-              <Wrap
-                spacing="16px"
-                spacingY={["16px", null, null, "24px"]}
-                alignItems="stretch"
-                justify={["center", null, null, "space-around"]}
-              >
-                <WrapItem>
-                  <SectionWithHeader title="Overall Task Details">
-                    <OverallTaskChart tasks={tasks} />
-                  </SectionWithHeader>
-                </WrapItem>
-                <WrapItem>
-                  <SectionWithHeader title="Completed On / Before Due Date Task">
-                    <CompletedOnDueDateTaskChart tasks={tasks} />
-                  </SectionWithHeader>
-                </WrapItem>
-              </Wrap>
-            )}
-          </>
+          <Wrap
+            spacing="16px"
+            spacingY={["16px", null, null, "24px"]}
+            alignItems="stretch"
+            justify={["center", null, null, "space-around"]}
+          >
+            <WrapItem>
+              <SectionWithHeader title="Overall Task Details">
+                <OverallTaskChart tasks={tasks} />
+              </SectionWithHeader>
+            </WrapItem>
+            <WrapItem>
+              <SectionWithHeader title="Completed On / Before Due Date Task">
+                <CompletedOnDueDateTaskChart tasks={tasks} />
+              </SectionWithHeader>
+            </WrapItem>
+          </Wrap>
         );
       }}
     </WithLoader>
