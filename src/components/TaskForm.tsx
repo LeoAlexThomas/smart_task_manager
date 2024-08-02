@@ -45,6 +45,7 @@ const TaskForm = ({
             required: true,
           }}
           title="Description"
+          maxLength={500}
           placeholder="Enter task details..."
           resize="none"
         />

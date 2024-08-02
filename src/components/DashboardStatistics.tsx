@@ -44,30 +44,27 @@ const DashboardStatistics = () => {
   return (
     <WithLoader apiFn={() => getTasks()} updateLatestData={(val) => val}>
       {({ data: tasks }: { data: TaskInterface[] }) => {
+        if (isEmpty(tasks)) {
+          return <EmptyTask showAddLink h="50vh" />;
+        }
         return (
-          <>
-            {isEmpty(tasks) ? (
-              <EmptyTask />
-            ) : (
-              <Wrap
-                spacing="16px"
-                spacingY={["16px", null, null, "24px"]}
-                alignItems="stretch"
-                justify={["center", null, null, "space-around"]}
-              >
-                <WrapItem>
-                  <SectionWithHeader title="Overall Task Details">
-                    <OverallTaskChart tasks={tasks} />
-                  </SectionWithHeader>
-                </WrapItem>
-                <WrapItem>
-                  <SectionWithHeader title="Completed On / Before Due Date Task">
-                    <CompletedOnDueDateTaskChart tasks={tasks} />
-                  </SectionWithHeader>
-                </WrapItem>
-              </Wrap>
-            )}
-          </>
+          <Wrap
+            spacing="16px"
+            spacingY={["16px", null, null, "24px"]}
+            alignItems="stretch"
+            justify={["center", null, null, "space-around"]}
+          >
+            <WrapItem>
+              <SectionWithHeader title="Overall Task Details">
+                <OverallTaskChart tasks={tasks} />
+              </SectionWithHeader>
+            </WrapItem>
+            <WrapItem>
+              <SectionWithHeader title="Task Completion On Time">
+                <CompletedOnDueDateTaskChart tasks={tasks} />
+              </SectionWithHeader>
+            </WrapItem>
+          </Wrap>
         );
       }}
     </WithLoader>
@@ -115,19 +112,21 @@ const OverallTaskChart = ({ tasks }: { tasks: TaskInterface[] }) => {
 const CompletedOnDueDateTaskChart = ({ tasks }: { tasks: TaskInterface[] }) => {
   const isMobile = useBreakpointValue({ base: true, sm: false });
   const completedTasks = tasks.filter((task) => task.isCompleted);
-  const completedTaskCount = completedTasks.length;
   const completedOnDueDateTaskCount = completedTasks.filter((task) =>
     dayjs(task.completedDate).isBefore(task.endDate)
+  ).length;
+  const completedNotOnDueDateTaskCount = completedTasks.filter(
+    (task) => !dayjs(task.completedDate).isBefore(task.endDate)
   ).length;
   const dashboardCompletedOnDueDateStatistics: {
     data: ChartData<"doughnut">;
     options: ChartOptions<"doughnut">;
   } = {
     data: {
-      labels: ["Completed Task", "On-time Task"],
+      labels: ["Not On-time", "On-time"],
       datasets: [
         {
-          data: [completedTaskCount, completedOnDueDateTaskCount],
+          data: [completedNotOnDueDateTaskCount, completedOnDueDateTaskCount],
           backgroundColor: ["#44bb44", "#4e4ebb"],
         },
       ],
@@ -142,6 +141,17 @@ const CompletedOnDueDateTaskChart = ({ tasks }: { tasks: TaskInterface[] }) => {
       },
     },
   };
+
+  if (completedNotOnDueDateTaskCount < 1 && completedOnDueDateTaskCount < 1) {
+    return (
+      <EmptyTask
+        my={[5, null, 10]}
+        message={
+          <Text fontSize={["12px", null, "16px"]}>Tasks are not completed</Text>
+        }
+      />
+    );
+  }
 
   return (
     <Box w="100%" h="100%" p={4} pt={0}>

@@ -127,13 +127,13 @@ const TaskDetails = () => {
                       task?.title ?? "this task"
                     }?`}
                   />
-                  <VStack alignItems="stretch" spacing={4}>
+                  <VStack alignItems="stretch" spacing={[6, null, 10]}>
                     <HStack
                       alignItems={["flex-start", null, "center"]}
                       justifyContent="space-between"
                     >
                       <Text
-                        fontSize={["24px", null, "28px"]}
+                        fontSize={["24px", null, "32px"]}
                         fontWeight={500}
                         lineHeight="1.2"
                       >
@@ -155,23 +155,23 @@ const TaskDetails = () => {
                         fontSize={["16px", null, "18px"]}
                         lineHeight={1.2}
                         color="#00000080"
-                        pt={[2, null, 2]}
+                        pt={[2, null, 4]}
                       >
                         {task.description}
                       </Text>
                     </Box>
-                    <ImageWithText
-                      imageSrc="/images/calendar.svg"
-                      text={dayjs(task.endDate).format("DD MMM YYYY")}
-                    />
                     <Text
-                      fontSize={["12px", null, "16px"]}
+                      fontSize={["16px", null, "20px"]}
                       lineHeight="1.2"
                       color={getPriorityColor(task.priorityLevel)}
                       fontWeight={700}
                     >
                       {getTaskPriorityLabel(task.priorityLevel)} Priority
                     </Text>
+                    <ImageWithText
+                      imageSrc="/images/calendar.svg"
+                      text={dayjs(task.endDate).format("DD MMM YYYY")}
+                    />
                     <ImageWithText
                       imageSrc="/images/locationGif.gif"
                       text={task.location}
@@ -207,7 +207,8 @@ const TaskDetails = () => {
                             color="#ff5b5b"
                           />
                         }
-                        maxW={["100%", null, "200px"]}
+                        w="100%"
+                        maxW={["100%", null, "150px"]}
                         onClick={onOpen}
                       >
                         Delete

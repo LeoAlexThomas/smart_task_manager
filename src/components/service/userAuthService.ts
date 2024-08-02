@@ -44,7 +44,7 @@ export const loginUser = async (
     );
     const token: string = await userDetails.user.getIdToken();
     setUserToken(token);
-    return { isSuccess: true, message: "User SignedUp successfully" };
+    return { isSuccess: true, message: "User SignedIn successfully" };
   } catch (error: any) {
     return {
       isSuccess: false,
