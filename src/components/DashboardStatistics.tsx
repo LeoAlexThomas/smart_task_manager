@@ -115,19 +115,21 @@ const OverallTaskChart = ({ tasks }: { tasks: TaskInterface[] }) => {
 const CompletedOnDueDateTaskChart = ({ tasks }: { tasks: TaskInterface[] }) => {
   const isMobile = useBreakpointValue({ base: true, sm: false });
   const completedTasks = tasks.filter((task) => task.isCompleted);
-  const completedTaskCount = completedTasks.length;
   const completedOnDueDateTaskCount = completedTasks.filter((task) =>
     dayjs(task.completedDate).isBefore(task.endDate)
+  ).length;
+  const completedNotOnDueDateTaskCount = completedTasks.filter(
+    (task) => !dayjs(task.completedDate).isBefore(task.endDate)
   ).length;
   const dashboardCompletedOnDueDateStatistics: {
     data: ChartData<"doughnut">;
     options: ChartOptions<"doughnut">;
   } = {
     data: {
-      labels: ["Completed Task", "On-time Task"],
+      labels: ["Not Completed On-time", "Completed On-time"],
       datasets: [
         {
-          data: [completedTaskCount, completedOnDueDateTaskCount],
+          data: [completedNotOnDueDateTaskCount, completedOnDueDateTaskCount],
           backgroundColor: ["#44bb44", "#4e4ebb"],
         },
       ],
@@ -142,6 +144,17 @@ const CompletedOnDueDateTaskChart = ({ tasks }: { tasks: TaskInterface[] }) => {
       },
     },
   };
+
+  if (completedNotOnDueDateTaskCount < 1 && completedOnDueDateTaskCount < 1) {
+    return (
+      <EmptyTask
+        my={[5, null, 10]}
+        message={
+          <Text fontSize={["12px", null, "16px"]}>Tasks are not completed</Text>
+        }
+      />
+    );
+  }
 
   return (
     <Box w="100%" h="100%" p={4} pt={0}>

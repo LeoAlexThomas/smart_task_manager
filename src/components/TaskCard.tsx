@@ -104,6 +104,8 @@ const TaskCard = ({ task }: { task: TaskInterface }) => {
               lineHeight="1.2"
               noOfLines={1}
               textOverflow="ellipsis"
+              color="blue.500"
+              textDecoration="underline"
             >
               {task.title}
             </Text>
