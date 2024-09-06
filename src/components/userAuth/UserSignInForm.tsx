@@ -2,16 +2,16 @@ import { VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useFirebaseApp } from "../context/firebaseApp";
 import InputField from "../form/InputField";
 import useCustomToast, { ToastStatusEnum } from "../hook/useCustomToast";
 import PrimaryButton from "../PrimaryButton";
-import { loginUser } from "../service/userAuthService";
 import { SignInUserInterface } from "../types/user";
+import api from "../api";
+import { useApi } from "@/components/hook/useApi";
 
 const UserSignInForm = () => {
   const router = useRouter();
-  const { auth } = useFirebaseApp();
+  const { makeApiCall } = useApi();
   const { showToast } = useCustomToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const hForm = useForm<SignInUserInterface>({
@@ -23,28 +23,31 @@ const UserSignInForm = () => {
   });
 
   const onSubmit = async (values: SignInUserInterface) => {
-    if (!auth) {
-      showToast({
-        title: "Firebase Auth is not available",
-        status: ToastStatusEnum.error,
-      });
-      return;
-    }
-
     setIsLoading(true);
-    const response = await loginUser(values.userEmail, values.password, auth);
-    setIsLoading(false);
-    if (response.isSuccess) {
-      showToast({
-        title: response.message,
-        status: ToastStatusEnum.success,
-      });
-      router.replace("/");
-      return;
-    }
-    showToast({
-      title: response.message,
-      status: ToastStatusEnum.error,
+    makeApiCall({
+      apiFn: () =>
+        api("/user/login", {
+          method: "POST",
+          data: {
+            email: values.userEmail,
+            password: values.password,
+          },
+        }),
+      onSuccess: (res) => {
+        setIsLoading(false);
+        showToast({
+          title: res.message,
+          status: ToastStatusEnum.success,
+        });
+        router.replace("/");
+      },
+      onFailure: (err) => {
+        setIsLoading(false);
+        showToast({
+          title: (err as any).message,
+          status: ToastStatusEnum.error,
+        });
+      },
     });
   };
 

@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import TaskForm from "@/components/TaskForm";
-import useApi from "@/components/hook/useApi";
+import { useApi } from "@/components/hook/useApi";
 import useCustomToast, {
   ToastStatusEnum,
 } from "@/components/hook/useCustomToast";
@@ -21,7 +21,7 @@ const EditTask = () => {
   const onSubmit = (values: CreateTaskInterface, taskId: string) => {
     makeApiCall({
       apiFn: () => editTask(taskId, values),
-      onSuccess: (res) => {
+      onSuccess: (res: any) => {
         if (res.isSuccess) {
           showToast({
             title: res.message,
@@ -35,7 +35,7 @@ const EditTask = () => {
           status: ToastStatusEnum.error,
         });
       },
-      onFailure: (err) => {
+      onFailure: (err: any) => {
         showToast({
           title: err.message ?? "Something went wrong",
           status: ToastStatusEnum.error,

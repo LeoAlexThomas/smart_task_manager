@@ -16,8 +16,8 @@ import Link from "next/link";
 import ImageWithText from "./ImageWithText";
 import WarningModal from "./WarningModal";
 import useFirebaseDBActions from "./service/firebaseDBService";
-import useApi from "./hook/useApi";
 import useCustomToast, { ToastStatusEnum } from "./hook/useCustomToast";
+import { useApi } from "@/components/hook/useApi";
 
 const TaskCard = ({ task }: { task: TaskInterface }) => {
   const isTablet = useBreakpointValue({ base: true, md: false });
@@ -30,7 +30,7 @@ const TaskCard = ({ task }: { task: TaskInterface }) => {
   const handleDelete = () => {
     makeApiCall({
       apiFn: () => deleteTask(task.id),
-      onSuccess: (res) => {
+      onSuccess: (res: any) => {
         onClose();
         if (res.isSuccess) {
           showToast({
@@ -41,7 +41,7 @@ const TaskCard = ({ task }: { task: TaskInterface }) => {
         }
         showToast({ title: res.message, status: ToastStatusEnum.error });
       },
-      onFailure: (err) => {
+      onFailure: (err: any) => {
         showToast({
           title: err.message ?? "Something went wrong",
           status: ToastStatusEnum.error,
@@ -58,7 +58,7 @@ const TaskCard = ({ task }: { task: TaskInterface }) => {
           isCompleted,
           completedDate: isCompleted ? dayjs().toISOString() : null,
         }),
-      onSuccess: (res) => {
+      onSuccess: (res: any) => {
         if (res.isSuccess) {
           showToast({
             title: res.message,
@@ -68,7 +68,7 @@ const TaskCard = ({ task }: { task: TaskInterface }) => {
         }
         showToast({ title: res.message, status: ToastStatusEnum.error });
       },
-      onFailure: (err) => {
+      onFailure: (err: any) => {
         showToast({
           title: err.message ?? "Something went wrong",
           status: ToastStatusEnum.error,

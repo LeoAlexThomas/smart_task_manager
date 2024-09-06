@@ -29,7 +29,7 @@ import ErrorMsg from "@/components/ErrorMsg";
 import useCustomToast, {
   ToastStatusEnum,
 } from "@/components/hook/useCustomToast";
-import useApi from "@/components/hook/useApi";
+import { useApi } from "@/components/hook/useApi";
 
 const TaskDetails = () => {
   const router = useRouter();
@@ -43,7 +43,7 @@ const TaskDetails = () => {
   const handleDelete = (taskId: string) => {
     makeApiCall({
       apiFn: () => deleteTask(taskId),
-      onSuccess: (res) => {
+      onSuccess: (res: any) => {
         onClose();
         if (res.isSuccess) {
           showToast({
@@ -55,7 +55,7 @@ const TaskDetails = () => {
         }
         showToast({ title: res.message, status: ToastStatusEnum.error });
       },
-      onFailure: (err) => {
+      onFailure: (err: any) => {
         showToast({
           title: err.message ?? "Something went wrong",
           status: ToastStatusEnum.error,
@@ -72,7 +72,7 @@ const TaskDetails = () => {
           isCompleted,
           completedDate: isCompleted ? dayjs().toISOString() : null,
         }),
-      onSuccess: (res) => {
+      onSuccess: (res: any) => {
         if (res.isSuccess) {
           showToast({
             title: res.message,
@@ -82,7 +82,7 @@ const TaskDetails = () => {
         }
         showToast({ title: res.message, status: ToastStatusEnum.error });
       },
-      onFailure: (err) => {
+      onFailure: (err: any) => {
         showToast({
           title: err.message ?? "Something went wrong",
           status: ToastStatusEnum.error,

@@ -1,32 +1,46 @@
-import { useState } from "react";
-import { ErrorResponse } from "../types/common";
+import { usePageLoader } from "../context/pageLoaderContext";
 
-const useApi = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+export function useApi() {
+  const { onOpen: showPageLoader, onClose: hidePageLoader } = usePageLoader();
 
-  function makeApiCall<T>({
+  const makeApiCall = async function <T>({
     apiFn,
     onSuccess,
     onFailure,
+    successMsg,
+    showLoader = true,
+    showFailureMsg = true,
   }: {
-    apiFn: () => Promise<T>;
-    onSuccess: (res: T) => void;
-    onFailure: (err: ErrorResponse) => void;
+    apiFn: () => T;
+    onSuccess?: (response: T) => void;
+    onFailure?: (error: unknown) => void;
+    successMsg?: { title: string; description?: string; duration?: number };
+    showLoader?: boolean;
+    showFailureMsg?: boolean;
   }) {
-    setIsLoading(true);
-    apiFn()
-      .then((val) => {
-        onSuccess(val);
-      })
-      .catch((err) => {
-        onFailure(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }
+    if (showLoader) {
+      showPageLoader();
+    }
+    try {
+      const response = await apiFn();
+      hidePageLoader();
+      if (successMsg) {
+      }
 
-  return { makeApiCall, isLoading };
-};
+      if (onSuccess) {
+        onSuccess(response);
+      }
+    } catch (e) {
+      hidePageLoader();
+      console.log(e);
+      if (onFailure) {
+        onFailure(e);
+      }
+      if (!showFailureMsg) {
+        return;
+      }
+    }
+  };
 
-export default useApi;
+  return { makeApiCall };
+}

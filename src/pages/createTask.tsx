@@ -9,7 +9,7 @@ import useCustomToast, {
   ToastStatusEnum,
 } from "@/components/hook/useCustomToast";
 import useFirebaseDBActions from "@/components/service/firebaseDBService";
-import useApi from "@/components/hook/useApi";
+import { useApi } from "@/components/hook/useApi";
 
 const defaultTaskValues: CreateTaskInterface = {
   title: "",
@@ -40,7 +40,7 @@ const CreateTask = () => {
   const onSubmit = async (values: CreateTaskInterface) => {
     makeApiCall({
       apiFn: () => addTask(values),
-      onSuccess: (res) => {
+      onSuccess: (res: any) => {
         if (res.isSuccess) {
           showToast({
             title: res.message,
@@ -54,7 +54,7 @@ const CreateTask = () => {
           status: ToastStatusEnum.error,
         });
       },
-      onFailure: (err) => {
+      onFailure: (err: any) => {
         showToast({
           title: err.message ?? "Something went wrong",
           status: ToastStatusEnum.error,
