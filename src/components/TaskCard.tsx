@@ -15,67 +15,19 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import ImageWithText from "./ImageWithText";
 import WarningModal from "./WarningModal";
-import useFirebaseDBActions from "./service/firebaseDBService";
-import useCustomToast, { ToastStatusEnum } from "./hook/useCustomToast";
-import { useApi } from "@/components/hook/useApi";
 
-const TaskCard = ({ task }: { task: TaskInterface }) => {
+const TaskCard = ({
+  task,
+  onUpdate,
+  onDelete,
+}: {
+  task: TaskInterface;
+  onUpdate: (isCompleted: boolean) => void;
+  onDelete: () => void;
+}) => {
   const isTablet = useBreakpointValue({ base: true, md: false });
   const isTaskCompleted = task.isCompleted;
-  const { makeApiCall } = useApi();
-  const { showToast } = useCustomToast();
-  const { deleteTask, updateTaskStatus } = useFirebaseDBActions();
   const { isOpen, onClose, onOpen } = useDisclosure();
-
-  const handleDelete = () => {
-    makeApiCall({
-      apiFn: () => deleteTask(task.id),
-      onSuccess: (res: any) => {
-        onClose();
-        if (res.isSuccess) {
-          showToast({
-            title: res.message,
-            status: ToastStatusEnum.success,
-          });
-          return;
-        }
-        showToast({ title: res.message, status: ToastStatusEnum.error });
-      },
-      onFailure: (err: any) => {
-        showToast({
-          title: err.message ?? "Something went wrong",
-          status: ToastStatusEnum.error,
-        });
-      },
-    });
-  };
-
-  const handleTaskStatus = (isCompleted: boolean) => {
-    makeApiCall({
-      apiFn: () =>
-        updateTaskStatus(task.id, {
-          ...task,
-          isCompleted,
-          completedDate: isCompleted ? dayjs().toISOString() : null,
-        }),
-      onSuccess: (res: any) => {
-        if (res.isSuccess) {
-          showToast({
-            title: res.message,
-            status: ToastStatusEnum.success,
-          });
-          return;
-        }
-        showToast({ title: res.message, status: ToastStatusEnum.error });
-      },
-      onFailure: (err: any) => {
-        showToast({
-          title: err.message ?? "Something went wrong",
-          status: ToastStatusEnum.error,
-        });
-      },
-    });
-  };
 
   return (
     <Box
@@ -92,12 +44,15 @@ const TaskCard = ({ task }: { task: TaskInterface }) => {
       <WarningModal
         isOpen={isOpen}
         onClose={onClose}
-        onYes={handleDelete}
+        onYes={() => {
+          onClose();
+          onDelete();
+        }}
         message={`Are you sure to delete ${task.title}?`}
       />
       <VStack alignItems="stretch" spacing={3}>
         <HStack alignItems="flex-end" justifyContent={["space-between"]}>
-          <Link href={`/task/${task.id}/`}>
+          <Link href={`/task/${task._id}/`}>
             <Text
               fontSize={["16px", null, "20px"]}
               fontWeight={500}
@@ -114,7 +69,7 @@ const TaskCard = ({ task }: { task: TaskInterface }) => {
             size={["md", null, "lg"]}
             colorScheme="green"
             isChecked={isTaskCompleted}
-            onChange={(e) => handleTaskStatus(e.target.checked)}
+            onChange={(e) => onUpdate(e.target.checked)}
             mt={1}
           />
         </HStack>
@@ -149,7 +104,7 @@ const TaskCard = ({ task }: { task: TaskInterface }) => {
           </Text>
           <HStack spacing={["12px", null, "24px"]} alignSelf="flex-end">
             <Link
-              href={`/editTask/${task.id}/`}
+              href={`/editTask/${task._id}/`}
               passHref
               style={{
                 pointerEvents: isTaskCompleted ? "none" : "auto",

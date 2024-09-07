@@ -1,6 +1,5 @@
 import { Box, chakra, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import InputField from "../form/InputField";
 import useCustomToast, { ToastStatusEnum } from "../hook/useCustomToast";
@@ -8,12 +7,13 @@ import PrimaryButton from "../PrimaryButton";
 import { CreateUserInterface } from "../types/user";
 import api from "../api";
 import { useApi } from "@/components/hook/useApi";
+import { ApiSuccessResponse, RegisterInfoResponse } from "../types/common";
+import { setUserToken } from "../utils";
 
 const UserSignUpForm = () => {
   const router = useRouter();
   const { showToast } = useCustomToast();
   const { makeApiCall } = useApi();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const hForm = useForm<CreateUserInterface>({
     mode: "onChange",
     defaultValues: {
@@ -40,8 +40,7 @@ const UserSignUpForm = () => {
       return;
     }
 
-    setIsLoading(true);
-    makeApiCall({
+    makeApiCall<ApiSuccessResponse<RegisterInfoResponse>>({
       apiFn: () =>
         api("/user/register", {
           method: "POST",
@@ -52,7 +51,7 @@ const UserSignUpForm = () => {
           },
         }),
       onSuccess: (res) => {
-        setIsLoading(false);
+        setUserToken(res.data.accessToken);
         showToast({
           title: res.message,
           status: res.isSuccess
@@ -62,7 +61,6 @@ const UserSignUpForm = () => {
         router.replace("/");
       },
       onFailure: (err) => {
-        setIsLoading(false);
         showToast({
           title: (err as any).message,
           status: ToastStatusEnum.error,
@@ -122,9 +120,7 @@ const UserSignUpForm = () => {
           placeholder="Enter Confirm Password"
         />
 
-        <PrimaryButton type="submit" isLoading={isLoading}>
-          Sign Up
-        </PrimaryButton>
+        <PrimaryButton type="submit">Sign Up</PrimaryButton>
       </VStack>
     </form>
   );

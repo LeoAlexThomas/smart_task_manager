@@ -8,6 +8,7 @@ import PrimaryButton from "../PrimaryButton";
 import { SignInUserInterface } from "../types/user";
 import api from "../api";
 import { useApi } from "@/components/hook/useApi";
+import { setUserToken } from "../utils";
 
 const UserSignInForm = () => {
   const router = useRouter();
@@ -24,7 +25,7 @@ const UserSignInForm = () => {
 
   const onSubmit = async (values: SignInUserInterface) => {
     setIsLoading(true);
-    makeApiCall({
+    makeApiCall<{ message: string; data: { accessToken: string } }>({
       apiFn: () =>
         api("/user/login", {
           method: "POST",
@@ -35,10 +36,12 @@ const UserSignInForm = () => {
         }),
       onSuccess: (res) => {
         setIsLoading(false);
+        setUserToken(res.data.accessToken);
         showToast({
           title: res.message,
           status: ToastStatusEnum.success,
         });
+
         router.replace("/");
       },
       onFailure: (err) => {

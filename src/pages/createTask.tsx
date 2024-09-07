@@ -8,8 +8,8 @@ import TaskForm from "@/components/TaskForm";
 import useCustomToast, {
   ToastStatusEnum,
 } from "@/components/hook/useCustomToast";
-import useFirebaseDBActions from "@/components/service/firebaseDBService";
 import { useApi } from "@/components/hook/useApi";
+import api from "@/components/api";
 
 const defaultTaskValues: CreateTaskInterface = {
   title: "",
@@ -23,7 +23,7 @@ const CreateTask = () => {
   const router = useRouter();
   const { makeApiCall } = useApi();
   const { showToast } = useCustomToast();
-  const { addTask } = useFirebaseDBActions();
+  // const { addTask } = useFirebaseDBActions();
   const [title, setTitle] = useState<string | undefined>();
 
   useEffect(() => {
@@ -39,7 +39,11 @@ const CreateTask = () => {
 
   const onSubmit = async (values: CreateTaskInterface) => {
     makeApiCall({
-      apiFn: () => addTask(values),
+      apiFn: () =>
+        api("/createTask", {
+          method: "POST",
+          data: { ...values, isCompleted: false },
+        }),
       onSuccess: (res: any) => {
         if (res.isSuccess) {
           showToast({
