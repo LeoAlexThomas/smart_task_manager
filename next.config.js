@@ -5,8 +5,7 @@ const getEnvConfig = () => {
     case "dev":
       return {
         env: "dev",
-        apiUrl:
-          "https://smart-task-manager-backend.netlify.app/.netlify/functions/api",
+        apiUrl: "http://localhost:3001/.netlify/functions/api",
         websiteUrl: "http://localhost:3000",
       };
     case "stage":
