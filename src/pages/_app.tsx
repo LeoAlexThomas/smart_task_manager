@@ -54,15 +54,15 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       </Head>
       {/* <FirebaseAppProvider> */}
       <SWRConfig value={swrConfigData}>
-        <PageLoaderProvider>
-          <LoginCheckProvider>
-            <UserInfoProvider>
-              <ChakraProvider>
+        <LoginCheckProvider>
+          <UserInfoProvider>
+            <ChakraProvider>
+              <PageLoaderProvider>
                 {getLayout(<Component {...pageProps} key={router.asPath} />)}
-              </ChakraProvider>
-            </UserInfoProvider>
-          </LoginCheckProvider>
-        </PageLoaderProvider>
+              </PageLoaderProvider>
+            </ChakraProvider>
+          </UserInfoProvider>
+        </LoginCheckProvider>
       </SWRConfig>
       {/* </FirebaseAppProvider> */}
     </>
