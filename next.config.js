@@ -5,19 +5,22 @@ const getEnvConfig = () => {
     case "dev":
       return {
         env: "dev",
-        apiUrl: "http://localhost:3001/api",
+        apiUrl:
+          "https://smart-task-manager-backend.netlify.app/.netlify/functions/api",
         websiteUrl: "http://localhost:3000",
       };
     case "stage":
       return {
         env: "stage",
-        apiUrl: "https://smartTaskManager-stage-backend.com/api",
+        apiUrl:
+          "https://smart-task-manager-backend.netlify.app/.netlify/functions/api",
         websiteUrl: "https://smartTaskManager-stage.com/api",
       };
     case "prod":
       return {
         env: "prod",
-        apiUrl: "https://smartTaskManager-backend.com/api",
+        apiUrl:
+          "https://smart-task-manager-backend.netlify.app/.netlify/functions/api",
         websiteUrl: "https://smartTaskManager.com/api",
       };
   }
