@@ -5,7 +5,7 @@ export enum PriorityLevelEnum {
 }
 
 export interface TaskInterface {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   createdAt: string;

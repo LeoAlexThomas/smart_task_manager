@@ -1,22 +1,23 @@
 import { Box, chakra, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useFirebaseApp } from "../context/firebaseApp";
 import InputField from "../form/InputField";
 import useCustomToast, { ToastStatusEnum } from "../hook/useCustomToast";
 import PrimaryButton from "../PrimaryButton";
-import { createUser } from "../service/userAuthService";
 import { CreateUserInterface } from "../types/user";
+import api from "../api";
+import { useApi } from "@/components/hook/useApi";
+import { ApiSuccessResponse, RegisterInfoResponse } from "../types/common";
+import { setUserToken } from "../utils";
 
 const UserSignUpForm = () => {
   const router = useRouter();
-  const { auth } = useFirebaseApp();
   const { showToast } = useCustomToast();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { makeApiCall } = useApi();
   const hForm = useForm<CreateUserInterface>({
     mode: "onChange",
     defaultValues: {
+      userName: "",
       userEmail: "",
       password: "",
       confirmPassword: "",
@@ -39,26 +40,33 @@ const UserSignUpForm = () => {
       return;
     }
 
-    if (!auth) {
-      showToast({
-        title: "Firebase Auth is not available",
-        status: ToastStatusEnum.error,
-      });
-      return;
-    }
-
-    setIsLoading(true);
-    const response = await createUser(values.userEmail, values.password, auth);
-    setIsLoading(false);
-    showToast({
-      title: response.message,
-      status: response.isSuccess
-        ? ToastStatusEnum.success
-        : ToastStatusEnum.error,
+    makeApiCall<ApiSuccessResponse<RegisterInfoResponse>>({
+      apiFn: () =>
+        api("/user/register", {
+          method: "POST",
+          data: {
+            userName: values.userName,
+            email: values.userEmail,
+            password: values.password,
+          },
+        }),
+      onSuccess: (res) => {
+        setUserToken(res.data.accessToken);
+        showToast({
+          title: res.message,
+          status: res.isSuccess
+            ? ToastStatusEnum.success
+            : ToastStatusEnum.error,
+        });
+        router.replace("/");
+      },
+      onFailure: (err) => {
+        showToast({
+          title: (err as any).message,
+          status: ToastStatusEnum.error,
+        });
+      },
     });
-    if (response.isSuccess) {
-      router.replace("/");
-    }
   };
 
   return (
@@ -74,6 +82,13 @@ const UserSignUpForm = () => {
         mx="auto"
         spacing={[4, null, 6]}
       >
+        <InputField
+          hForm={hForm}
+          name="userName"
+          title="User Name"
+          rules={{ required: true }}
+          placeholder="Enter your name..."
+        />
         <InputField
           hForm={hForm}
           name="userEmail"
@@ -105,9 +120,7 @@ const UserSignUpForm = () => {
           placeholder="Enter Confirm Password"
         />
 
-        <PrimaryButton type="submit" isLoading={isLoading}>
-          Sign Up
-        </PrimaryButton>
+        <PrimaryButton type="submit">Sign Up</PrimaryButton>
       </VStack>
     </form>
   );

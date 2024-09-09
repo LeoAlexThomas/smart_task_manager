@@ -22,40 +22,40 @@ import { DeleteOutline } from "@emotion-icons/material/DeleteOutline";
 import Link from "next/link";
 import DeleteButton from "@/components/DeleteButton";
 import WarningModal from "@/components/WarningModal";
-import WithLoader from "@/components/WithLoader";
-import useFirebaseDBActions from "@/components/service/firebaseDBService";
-import { ErrorResponse } from "@/components/types/common";
+import { ApiSuccessResponse, ErrorResponse } from "@/components/types/common";
 import ErrorMsg from "@/components/ErrorMsg";
 import useCustomToast, {
   ToastStatusEnum,
 } from "@/components/hook/useCustomToast";
-import useApi from "@/components/hook/useApi";
+import { useApi } from "@/components/hook/useApi";
+import WithLoaderSWR from "@/components/WithLoaderSWR";
+import api from "@/components/api";
+import { KeyedMutator } from "swr";
 
 const TaskDetails = () => {
   const router = useRouter();
   const queryTaskId = String(router.query.id ?? "");
   const { showToast } = useCustomToast();
   const { makeApiCall } = useApi();
-  const { getTaskById, deleteTask, updateTaskStatus } = useFirebaseDBActions();
   const isTablet = useBreakpointValue({ base: true, md: false });
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const handleDelete = (taskId: string) => {
-    makeApiCall({
-      apiFn: () => deleteTask(taskId),
-      onSuccess: (res) => {
+    makeApiCall<ApiSuccessResponse<{}>>({
+      apiFn: () =>
+        api(`/deleteTask/${taskId}`, {
+          method: "DELETE",
+        }),
+      onSuccess: (res: any) => {
         onClose();
-        if (res.isSuccess) {
-          showToast({
-            title: res.message,
-            status: ToastStatusEnum.success,
-          });
-          router.replace("/");
-          return;
-        }
-        showToast({ title: res.message, status: ToastStatusEnum.error });
+        router.replace("/");
+        showToast({
+          title: res.message,
+          status: ToastStatusEnum.success,
+        });
       },
-      onFailure: (err) => {
+      onFailure: (err: any) => {
+        onClose();
         showToast({
           title: err.message ?? "Something went wrong",
           status: ToastStatusEnum.error,
@@ -64,25 +64,32 @@ const TaskDetails = () => {
     });
   };
 
-  const handleTaskStatus = (task: TaskInterface, isCompleted: boolean) => {
+  const handleUpdate = (
+    updatableTask: TaskInterface,
+    isCompleted: boolean,
+    mutate: KeyedMutator<TaskInterface>
+  ) => {
+    const requestObj: TaskInterface = {
+      ...updatableTask,
+      isCompleted,
+      completedDate: isCompleted ? dayjs().toISOString() : null,
+    };
+    mutate(requestObj, { revalidate: false });
     makeApiCall({
       apiFn: () =>
-        updateTaskStatus(task.id, {
-          ...task,
-          isCompleted,
-          completedDate: isCompleted ? dayjs().toISOString() : null,
+        api(`/updateTask/${updatableTask._id}`, {
+          method: "PUT",
+          data: requestObj,
         }),
-      onSuccess: (res) => {
-        if (res.isSuccess) {
-          showToast({
-            title: res.message,
-            status: ToastStatusEnum.success,
-          });
-          return;
-        }
-        showToast({ title: res.message, status: ToastStatusEnum.error });
+      onSuccess: (res: any) => {
+        mutate();
+        showToast({
+          title: res.message,
+          status: ToastStatusEnum.success,
+        });
       },
-      onFailure: (err) => {
+      onFailure: (err: any) => {
+        mutate();
         showToast({
           title: err.message ?? "Something went wrong",
           status: ToastStatusEnum.error,
@@ -98,31 +105,28 @@ const TaskDetails = () => {
       </Head>
       <Layout pageTitle="Task Details">
         <>
-          <WithLoader
-            apiFn={() => getTaskById(queryTaskId ?? "")}
+          <WithLoaderSWR
+            apiUrl={queryTaskId ? `/getTask/${queryTaskId}` : ""}
             customError={({ err }: { err: ErrorResponse }) => {
               if (err.message === "Task not found") {
                 return <EmptyTask />;
               }
               return <ErrorMsg text={err.message} />;
             }}
-            updateLatestData={(val) => {
-              const task = val.find(
-                (task: TaskInterface) => task.id === queryTaskId
-              );
-              if (!task) {
-                return val;
-              }
-              return task;
-            }}
           >
-            {({ data: task }: { data: TaskInterface }) => {
+            {({
+              data: task,
+              mutate,
+            }: {
+              data: TaskInterface;
+              mutate: KeyedMutator<TaskInterface>;
+            }) => {
               return (
                 <>
                   <WarningModal
                     isOpen={isOpen}
                     onClose={onClose}
-                    onYes={() => handleDelete(task.id)}
+                    onYes={() => handleDelete(task._id)}
                     message={`Are you sure to delete ${
                       task?.title ?? "this task"
                     }?`}
@@ -144,7 +148,7 @@ const TaskDetails = () => {
                         isChecked={task.isCompleted}
                         colorScheme="green"
                         onChange={(e) =>
-                          handleTaskStatus(task, e.target.checked)
+                          handleUpdate(task, e.target.checked, mutate)
                         }
                       />
                     </HStack>
@@ -181,7 +185,7 @@ const TaskDetails = () => {
                       alignSelf={["stretch", "flex-end"]}
                     >
                       <Link
-                        href={`/editTask/${task.id}`}
+                        href={`/editTask/${task._id}`}
                         passHref
                         style={{
                           width: isTablet ? "100%" : "200px",
@@ -218,7 +222,7 @@ const TaskDetails = () => {
                 </>
               );
             }}
-          </WithLoader>
+          </WithLoaderSWR>
         </>
       </Layout>
     </>

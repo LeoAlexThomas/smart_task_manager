@@ -3,9 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "cross-env ENV=dev next dev",
+    "build": "cross-env ENV=dev next build",
+    "start": "cross-env ENV=dev next start",
+    "stage:build": "cross-env ENV=stage next build",
+    "stage:start": "cross-env ENV=stage next start",
+    "prod:build": "cross-env ENV=prod next build",
+    "prod:start": "cross-env ENV=prod next start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -14,18 +18,24 @@
     "@emotion/styled": "^11.13.0",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.17.7",
+    "axios": "^1.7.7",
     "chart.js": "^4.4.3",
+    "cross-env": "^7.0.3",
     "dayjs": "^1.11.12",
+    "dotenv": "^16.4.5",
     "emotion-icons": "^3.27.0",
     "firebase": "^10.12.4",
     "framer-motion": "^11.3.19",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
+    "moment": "^2.30.1",
     "next": "14.2.5",
+    "nookies": "^2.5.2",
     "react": "^18",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
-    "react-hook-form": "^7.52.1"
+    "react-hook-form": "^7.52.1",
+    "swr": "^2.2.5"
   },
   "devDependencies": {
     "@types/node": "^20",

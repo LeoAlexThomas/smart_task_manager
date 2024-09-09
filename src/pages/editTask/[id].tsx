@@ -4,23 +4,28 @@ import dayjs from "dayjs";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import TaskForm from "@/components/TaskForm";
-import useApi from "@/components/hook/useApi";
+import { useApi } from "@/components/hook/useApi";
 import useCustomToast, {
   ToastStatusEnum,
 } from "@/components/hook/useCustomToast";
-import useFirebaseDBActions from "@/components/service/firebaseDBService";
-import WithLoader from "@/components/WithLoader";
+import WithLoaderSWR from "@/components/WithLoaderSWR";
+import api from "@/components/api";
+import { ApiSuccessResponse } from "@/components/types/common";
 
 const EditTask = () => {
   const router = useRouter();
-  const { getTaskById, editTask } = useFirebaseDBActions();
+  // const { getTaskById, editTask } = useFirebaseDBActions();
   const { makeApiCall } = useApi();
   const { showToast } = useCustomToast();
   const queryTaskId = String(router.query.id ?? "");
 
   const onSubmit = (values: CreateTaskInterface, taskId: string) => {
-    makeApiCall({
-      apiFn: () => editTask(taskId, values),
+    makeApiCall<ApiSuccessResponse<{}>>({
+      apiFn: () =>
+        api(`/updateTask/${taskId}`, {
+          method: "PUT",
+          data: values,
+        }),
       onSuccess: (res) => {
         if (res.isSuccess) {
           showToast({
@@ -35,7 +40,7 @@ const EditTask = () => {
           status: ToastStatusEnum.error,
         });
       },
-      onFailure: (err) => {
+      onFailure: (err: any) => {
         showToast({
           title: err.message ?? "Something went wrong",
           status: ToastStatusEnum.error,
@@ -50,18 +55,7 @@ const EditTask = () => {
         <title>Edit Task</title>
       </Head>
       <Layout pageTitle="Edit Task">
-        <WithLoader
-          apiFn={() => getTaskById(queryTaskId ?? "")}
-          updateLatestData={(val) => {
-            const task = val.find(
-              (task: TaskInterface) => task.id === queryTaskId
-            );
-            if (!task) {
-              return val;
-            }
-            return task;
-          }}
-        >
+        <WithLoaderSWR apiUrl={queryTaskId ? `/getTask/${queryTaskId}` : ""}>
           {({ data }: { data: TaskInterface }) => {
             return (
               <TaskForm
@@ -72,11 +66,11 @@ const EditTask = () => {
                   location: data.location,
                   priorityLevel: data.priorityLevel,
                 }}
-                onSubmit={(val) => onSubmit(val, data.id)}
+                onSubmit={(val) => onSubmit(val, data._id)}
               />
             );
           }}
-        </WithLoader>
+        </WithLoaderSWR>
       </Layout>
     </>
   );
