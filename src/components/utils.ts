@@ -101,3 +101,7 @@ export const getPriorityColor = (priority: PriorityLevelEnum): string => {
       return "#ff5b5b";
   }
 };
+
+export const logout = () => {
+  Cookies.remove(userTokenCookieName);
+};

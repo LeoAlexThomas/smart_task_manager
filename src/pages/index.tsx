@@ -9,7 +9,7 @@ import SearchTextInput from "@/components/SearchTextInput";
 import TaskList from "@/components/TaskList";
 import { TaskInterface } from "@/components/types/task";
 import FloatingActionButton from "@/components/FloatingActionButton";
-import WithLoaderSWR from "@/components/WithLoaderSWR";
+import WithLoader from "@/components/WithLoader";
 import { KeyedMutator } from "swr";
 
 const HomePage = () => {
@@ -44,7 +44,7 @@ const HomePage = () => {
         }
       >
         <>
-          <WithLoaderSWR apiUrl={`/getTasks/?searchText=${searchText}`}>
+          <WithLoader apiUrl={`/getTasks/?searchText=${searchText}`}>
             {({
               data: tasks,
               mutate,
@@ -62,7 +62,7 @@ const HomePage = () => {
                 </>
               );
             }}
-          </WithLoaderSWR>
+          </WithLoader>
 
           <FloatingActionButton
             pageLink={`/createTask/${

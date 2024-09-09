@@ -5,6 +5,11 @@ export interface CreateUserInterface {
   confirmPassword: string;
 }
 
+export interface UserInterface {
+  userName: string;
+  userEmail: string;
+}
+
 export interface SignInUserInterface {
   userEmail: string;
   password: string;

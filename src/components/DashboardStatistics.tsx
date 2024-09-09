@@ -23,10 +23,9 @@ import {
 import { Doughnut } from "react-chartjs-2";
 import dayjs from "dayjs";
 import isEmpty from "lodash/isEmpty";
-import WithLoader from "./WithLoader";
-import useFirebaseDBActions from "./service/firebaseDBService";
 import { TaskInterface } from "./types/task";
 import EmptyTask from "./EmptyTask";
+import WithLoader from "./WithLoader";
 
 ChartJS.register(
   ArcElement,
@@ -39,10 +38,8 @@ ChartJS.register(
 );
 
 const DashboardStatistics = () => {
-  const { getTasks } = useFirebaseDBActions();
-
   return (
-    <WithLoader apiFn={() => getTasks()} updateLatestData={(val) => val}>
+    <WithLoader apiUrl="/getTasks">
       {({ data: tasks }: { data: TaskInterface[] }) => {
         if (isEmpty(tasks)) {
           return <EmptyTask showAddLink h="50vh" />;

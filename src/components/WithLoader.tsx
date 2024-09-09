@@ -1,71 +1,42 @@
-import { useEffect, useState } from "react";
 import ErrorMsg from "./ErrorMsg";
 import Loader from "./Loader";
-import { CustomApiResponse, ErrorResponse } from "./types/common";
-import { onSnapshot } from "firebase/firestore";
-import useFirebaseDBActions from "./service/firebaseDBService";
+import { ErrorResponse } from "./types/common";
+import useSWR, { KeyedMutator } from "swr";
 
 function WithLoader<T>({
-  apiFn,
+  apiUrl,
   children,
-  updateLatestData,
-  dependencies,
   customError,
+  placeholder,
 }: {
-  apiFn: () => Promise<CustomApiResponse<T>>;
-  children: ({ data }: { data: T }) => React.ReactNode;
-  updateLatestData: (val: any) => T;
-  dependencies?: any;
+  apiUrl: string;
+  children: ({
+    data,
+    mutate,
+  }: {
+    data: T;
+    mutate: KeyedMutator<T>;
+  }) => React.ReactNode;
   customError?: ({ err }: { err: ErrorResponse }) => React.ReactNode;
+  placeholder?: React.ReactNode;
 }) {
-  const { getFirebaseCollectionRef } = useFirebaseDBActions();
-  const [result, setResult] = useState<T | null>(null);
-  const [error, setError] = useState<ErrorResponse | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  // Realtime updates
-  useEffect(() => {
-    const collectionRef = getFirebaseCollectionRef();
-    if (!collectionRef) {
-      return;
-    }
-    const unsubscribe = onSnapshot(collectionRef, (snapshot) => {
-      setResult(
-        updateLatestData(
-          snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-        )
-      );
-    });
+  const { data, error, mutate } = useSWR<T>(apiUrl);
 
-    return () => {
-      unsubscribe(); // remove Observer when component unmount
-    };
-  }, []);
-
-  useEffect(() => {
-    setIsLoading(true);
-    apiFn()
-      .then((val) => {
-        setIsLoading(false);
-        if (val.isSuccess) {
-          setResult(val.data);
-          return;
-        }
-        setError(val.error);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        return setError(err);
-      });
-  }, [dependencies]);
+  const isLoading = !data && !error;
 
   if (error) {
     return customError?.({ err: error }) ?? <ErrorMsg text={error.message} />;
   }
 
-  if (isLoading || !result) {
+  if (isLoading) {
     return <Loader />;
   }
-  return <>{children({ data: result })}</>;
+
+  if (!data) {
+    return placeholder ?? <></>;
+  }
+
+  return <>{children({ data, mutate })}</>;
 }
 
 export default WithLoader;

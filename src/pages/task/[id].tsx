@@ -28,7 +28,7 @@ import useCustomToast, {
   ToastStatusEnum,
 } from "@/components/hook/useCustomToast";
 import { useApi } from "@/components/hook/useApi";
-import WithLoaderSWR from "@/components/WithLoaderSWR";
+import WithLoader from "@/components/WithLoader";
 import api from "@/components/api";
 import { KeyedMutator } from "swr";
 
@@ -105,7 +105,7 @@ const TaskDetails = () => {
       </Head>
       <Layout pageTitle="Task Details">
         <>
-          <WithLoaderSWR
+          <WithLoader
             apiUrl={queryTaskId ? `/getTask/${queryTaskId}` : ""}
             customError={({ err }: { err: ErrorResponse }) => {
               if (err.message === "Task not found") {
@@ -222,7 +222,7 @@ const TaskDetails = () => {
                 </>
               );
             }}
-          </WithLoaderSWR>
+          </WithLoader>
         </>
       </Layout>
     </>

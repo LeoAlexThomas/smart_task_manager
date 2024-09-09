@@ -1,7 +1,9 @@
 import { usePageLoader } from "../context/pageLoaderContext";
+import useCustomToast, { ToastStatusEnum } from "./useCustomToast";
 
 export function useApi() {
   const { onOpen: showPageLoader, onClose: hidePageLoader } = usePageLoader();
+  const { showToast } = useCustomToast();
 
   const makeApiCall = async function <T>({
     apiFn,
@@ -10,6 +12,7 @@ export function useApi() {
     successMsg,
     showLoader = true,
     showFailureMsg = true,
+    hideMessage = false,
   }: {
     apiFn: () => T;
     onSuccess?: (response: T) => void;
@@ -17,6 +20,7 @@ export function useApi() {
     successMsg?: { title: string; description?: string; duration?: number };
     showLoader?: boolean;
     showFailureMsg?: boolean;
+    hideMessage?: boolean;
   }) {
     if (showLoader) {
       showPageLoader();
@@ -24,7 +28,12 @@ export function useApi() {
     try {
       const response = await apiFn();
       hidePageLoader();
-      if (successMsg) {
+      if (!hideMessage && successMsg) {
+        showToast({
+          title: successMsg.title,
+          description: successMsg.description,
+          status: ToastStatusEnum.success,
+        });
       }
 
       if (onSuccess) {
@@ -36,9 +45,13 @@ export function useApi() {
       if (onFailure) {
         onFailure(e);
       }
-      if (!showFailureMsg) {
+      if (hideMessage || !showFailureMsg) {
         return;
       }
+      showToast({
+        title: "Something went wrong",
+        status: ToastStatusEnum.error,
+      });
     }
   };
 

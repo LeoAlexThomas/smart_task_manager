@@ -1,7 +1,6 @@
 import DashboardStatistics from "@/components/DashboardStatistics";
 import EmptyTask from "@/components/EmptyTask";
 import Layout from "@/components/Layout";
-import useFirebaseDBActions from "@/components/service/firebaseDBService";
 import TaskList from "@/components/TaskList";
 import { TaskInterface } from "@/components/types/task";
 import WithLoader from "@/components/WithLoader";
@@ -16,10 +15,9 @@ import {
 import dayjs from "dayjs";
 import isEmpty from "lodash/isEmpty";
 import Head from "next/head";
+import { KeyedMutator } from "swr";
 
 const Dashboard = () => {
-  const { getTasks } = useFirebaseDBActions();
-
   return (
     <>
       <Head>
@@ -63,11 +61,14 @@ const Dashboard = () => {
               <DashboardStatistics />
             </TabPanel>
             <TabPanel px={0}>
-              <WithLoader
-                apiFn={() => getTasks()}
-                updateLatestData={(val) => val}
-              >
-                {({ data: tasks }: { data: TaskInterface[] }) => {
+              <WithLoader apiUrl="/getTasks">
+                {({
+                  data: tasks,
+                  mutate,
+                }: {
+                  data: TaskInterface[];
+                  mutate: KeyedMutator<TaskInterface[]>;
+                }) => {
                   if (isEmpty(tasks)) {
                     return <EmptyTask showAddLink h="50vh" />;
                   }
@@ -82,16 +83,21 @@ const Dashboard = () => {
                       />
                     );
                   }
-                  return <TaskList tasks={completedTasks} />;
+                  return (
+                    <TaskList tasks={completedTasks} taskListMutate={mutate} />
+                  );
                 }}
               </WithLoader>
             </TabPanel>
             <TabPanel px={0}>
-              <WithLoader
-                apiFn={() => getTasks()}
-                updateLatestData={(val) => val}
-              >
-                {({ data: tasks }: { data: TaskInterface[] }) => {
+              <WithLoader apiUrl="/getTasks">
+                {({
+                  data: tasks,
+                  mutate,
+                }: {
+                  data: TaskInterface[];
+                  mutate: KeyedMutator<TaskInterface[]>;
+                }) => {
                   if (isEmpty(tasks)) {
                     return <EmptyTask showAddLink h="50vh" />;
                   }
@@ -106,16 +112,21 @@ const Dashboard = () => {
                       />
                     );
                   }
-                  return <TaskList tasks={pendingTasks} />;
+                  return (
+                    <TaskList tasks={pendingTasks} taskListMutate={mutate} />
+                  );
                 }}
               </WithLoader>
             </TabPanel>
             <TabPanel px={0}>
-              <WithLoader
-                apiFn={() => getTasks()}
-                updateLatestData={(val) => val}
-              >
-                {({ data: tasks }: { data: TaskInterface[] }) => {
+              <WithLoader apiUrl="/getTasks">
+                {({
+                  data: tasks,
+                  mutate,
+                }: {
+                  data: TaskInterface[];
+                  mutate: KeyedMutator<TaskInterface[]>;
+                }) => {
                   if (isEmpty(tasks)) {
                     return <EmptyTask showAddLink h="50vh" />;
                   }
@@ -131,7 +142,9 @@ const Dashboard = () => {
                       />
                     );
                   }
-                  return <TaskList tasks={upcomingTasks} />;
+                  return (
+                    <TaskList tasks={upcomingTasks} taskListMutate={mutate} />
+                  );
                 }}
               </WithLoader>
             </TabPanel>

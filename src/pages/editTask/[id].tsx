@@ -8,7 +8,7 @@ import { useApi } from "@/components/hook/useApi";
 import useCustomToast, {
   ToastStatusEnum,
 } from "@/components/hook/useCustomToast";
-import WithLoaderSWR from "@/components/WithLoaderSWR";
+import WithLoader from "@/components/WithLoader";
 import api from "@/components/api";
 import { ApiSuccessResponse } from "@/components/types/common";
 
@@ -55,7 +55,7 @@ const EditTask = () => {
         <title>Edit Task</title>
       </Head>
       <Layout pageTitle="Edit Task">
-        <WithLoaderSWR apiUrl={queryTaskId ? `/getTask/${queryTaskId}` : ""}>
+        <WithLoader apiUrl={queryTaskId ? `/getTask/${queryTaskId}` : ""}>
           {({ data }: { data: TaskInterface }) => {
             return (
               <TaskForm
@@ -70,7 +70,7 @@ const EditTask = () => {
               />
             );
           }}
-        </WithLoaderSWR>
+        </WithLoader>
       </Layout>
     </>
   );

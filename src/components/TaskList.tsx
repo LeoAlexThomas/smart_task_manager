@@ -29,7 +29,7 @@ const TaskList = ({
         api(`/deleteTask/${taskId}`, {
           method: "DELETE",
         }),
-      onSuccess: (res: any) => {
+      onSuccess: (res) => {
         taskListMutate();
         showToast({
           title: res.message,
