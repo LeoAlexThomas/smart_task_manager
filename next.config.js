@@ -25,6 +25,7 @@ const getEnvConfig = () => {
   }
 };
 const nextConfig = {
+  output: "export",
   reactStrictMode: true,
   publicRuntimeConfig: getEnvConfig(),
 };
