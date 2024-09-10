@@ -9,26 +9,20 @@ import {
 } from "@chakra-ui/react";
 import { useUserInfo } from "./context/userInfo";
 import { logout } from "./utils";
-import { useFirebaseApp } from "./context/firebaseApp";
 import useCustomToast, { ToastStatusEnum } from "./hook/useCustomToast";
+import { useRouter } from "next/router";
 
 const UserProfile = () => {
+  const router = useRouter();
   const { userEmail, userName } = useUserInfo();
-  const { auth } = useFirebaseApp();
   const { showToast } = useCustomToast();
   const handleLogOut = async () => {
-    if (!auth) {
-      showToast({
-        title: "Firebase Auth is not available",
-        status: ToastStatusEnum.error,
-      });
-      return;
-    }
     logout();
     showToast({
       title: "Logged out",
       status: ToastStatusEnum.success,
     });
+    router.reload();
   };
 
   return (
