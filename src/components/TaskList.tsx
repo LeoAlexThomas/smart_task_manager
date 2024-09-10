@@ -71,6 +71,7 @@ const TaskList = ({
           method: "PUT",
           data: requestObj,
         }),
+      showLoader: false,
       onSuccess: (res: any) => {
         showToast({
           title: res.message,

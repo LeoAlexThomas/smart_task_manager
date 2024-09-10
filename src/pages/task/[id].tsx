@@ -81,6 +81,7 @@ const TaskDetails = () => {
           method: "PUT",
           data: requestObj,
         }),
+      showLoader: false,
       onSuccess: (res: any) => {
         mutate();
         showToast({
