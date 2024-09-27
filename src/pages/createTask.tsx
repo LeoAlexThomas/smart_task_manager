@@ -1,14 +1,12 @@
 import Layout from "@/components/Layout";
-import { CreateTaskInterface } from "@/components/types/task";
+import { CreateTaskInterface } from "@/types/task";
 import { isArray, isNil } from "lodash";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import TaskForm from "@/components/TaskForm";
-import useCustomToast, {
-  ToastStatusEnum,
-} from "@/components/hook/useCustomToast";
-import { useApi } from "@/components/hook/useApi";
+import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
+import { useApi } from "@/hook/useApi";
 import api from "@/components/api";
 
 const defaultTaskValues: CreateTaskInterface = {

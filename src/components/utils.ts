@@ -1,6 +1,6 @@
 import random from "lodash/random";
-import { PriorityLevelEnum } from "./types/task";
-import { SideBarMenu } from "./types/common";
+import { PriorityLevelEnum } from "@/types/task";
+import { SideBarMenu } from "@/types/common";
 import Cookies from "js-cookie";
 
 export const userTokenCookieName = "userToken";

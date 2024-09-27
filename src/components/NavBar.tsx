@@ -1,7 +1,7 @@
 import { HStack, Image, Text, VStack } from "@chakra-ui/react";
 import { menus } from "./utils";
 import { Fragment } from "react";
-import { SideBarMenu } from "./types/common";
+import { SideBarMenu } from "@/types/common";
 import { useRouter } from "next/router";
 import Link from "next/link";
 

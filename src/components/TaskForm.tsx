@@ -4,7 +4,7 @@ import { Save } from "@emotion-icons/fa-regular/Save";
 import InputField from "./form/InputField";
 import TextareaField from "./form/TextareaField";
 import PrimaryButton from "./PrimaryButton";
-import { CreateTaskInterface, PriorityLevelEnum } from "./types/task";
+import { CreateTaskInterface, PriorityLevelEnum } from "@/types/task";
 import { getTaskPriorityLabel, statesOfIndia } from "./utils";
 import SelectField from "./form/SelectField";
 import { useForm } from "react-hook-form";

@@ -3,11 +3,11 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import InputField from "../form/InputField";
-import useCustomToast, { ToastStatusEnum } from "../hook/useCustomToast";
+import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
 import PrimaryButton from "../PrimaryButton";
-import { SignInUserInterface } from "../types/user";
+import { SignInUserInterface } from "@/types/user";
 import api from "../api";
-import { useApi } from "@/components/hook/useApi";
+import { useApi } from "@/hook/useApi";
 import { setUserToken } from "../utils";
 
 const UserSignInForm = () => {

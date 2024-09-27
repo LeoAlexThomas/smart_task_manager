@@ -1,4 +1,4 @@
-import { usePageLoader } from "../context/pageLoaderContext";
+import { usePageLoader } from "@/context/pageLoaderContext";
 import useCustomToast, { ToastStatusEnum } from "./useCustomToast";
 
 export function useApi() {

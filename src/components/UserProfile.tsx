@@ -7,9 +7,9 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useUserInfo } from "./context/userInfo";
+import { useUserInfo } from "@/context/userInfo";
 import { logout } from "./utils";
-import useCustomToast, { ToastStatusEnum } from "./hook/useCustomToast";
+import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
 import { useRouter } from "next/router";
 
 const UserProfile = () => {

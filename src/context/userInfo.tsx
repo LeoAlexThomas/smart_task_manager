@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useLoginCheck } from "./loginCheck";
-import api from "../api";
+import api from "@/components/api";
 import { useApi } from "../hook/useApi";
 import { ApiSuccessResponse } from "../types/common";
 import { UserInterface } from "../types/user";

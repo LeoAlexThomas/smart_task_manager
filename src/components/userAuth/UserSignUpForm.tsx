@@ -2,12 +2,12 @@ import { Box, chakra, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import InputField from "../form/InputField";
-import useCustomToast, { ToastStatusEnum } from "../hook/useCustomToast";
+import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
 import PrimaryButton from "../PrimaryButton";
-import { CreateUserInterface } from "../types/user";
+import { CreateUserInterface } from "@/types/user";
 import api from "../api";
-import { useApi } from "@/components/hook/useApi";
-import { ApiSuccessResponse, RegisterInfoResponse } from "../types/common";
+import { useApi } from "@/hook/useApi";
+import { ApiSuccessResponse, RegisterInfoResponse } from "@/types/common";
 import { setUserToken } from "../utils";
 
 const UserSignUpForm = () => {

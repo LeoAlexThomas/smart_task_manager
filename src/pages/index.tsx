@@ -7,7 +7,7 @@ import Layout from "@/components/Layout";
 import SearchMenuPopup from "@/components/SearchMenuPopup";
 import SearchTextInput from "@/components/SearchTextInput";
 import TaskList from "@/components/TaskList";
-import { TaskInterface } from "@/components/types/task";
+import { TaskInterface } from "@/types/task";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import WithLoader from "@/components/WithLoader";
 import { KeyedMutator } from "swr";

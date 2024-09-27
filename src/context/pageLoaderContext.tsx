@@ -1,6 +1,6 @@
 import { useDisclosure } from "@chakra-ui/react";
 import { createContext, useContext } from "react";
-import PageLoader from "../PageLoader";
+import PageLoader from "@/components/PageLoader";
 
 interface ContextInterface {
   isOpen: boolean;

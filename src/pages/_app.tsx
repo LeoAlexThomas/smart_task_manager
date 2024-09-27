@@ -1,14 +1,14 @@
-// import { FirebaseAppProvider } from "@/components/context/firebaseApp";
+// import { FirebaseAppProvider } from "@/context/firebaseApp";
 import api from "@/components/api";
-import { LoginCheckProvider } from "@/components/context/loginCheck";
-import { UserInfoProvider } from "@/components/context/userInfo";
+import { LoginCheckProvider } from "@/context/loginCheck";
+import { UserInfoProvider } from "@/context/userInfo";
 import "@/styles/globals.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
 import { SWRConfig } from "swr";
 import { ReactElement, ReactNode } from "react";
 import Head from "next/head";
-import { PageLoaderProvider } from "@/components/context/pageLoaderContext";
+import { PageLoaderProvider } from "@/context/pageLoaderContext";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 

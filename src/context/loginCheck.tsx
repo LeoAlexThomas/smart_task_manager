@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
-import { unAutherizedPath, userTokenCookieName } from "../utils";
+import { unAutherizedPath, userTokenCookieName } from "@/components/utils";
 import Cookies from "js-cookie";
 
 interface ContextInterface {
