@@ -1,11 +1,11 @@
 import { SimpleGrid } from "@chakra-ui/react";
 import { Fragment } from "react";
 import TaskCard from "./TaskCard";
-import { TaskInterface } from "./types/task";
+import { TaskInterface } from "@/types/task";
 import { KeyedMutator } from "swr";
-import useCustomToast, { ToastStatusEnum } from "./hook/useCustomToast";
-import { useApi } from "@/components/hook/useApi";
-import { ApiSuccessResponse } from "./types/common";
+import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
+import { useApi } from "@/hook/useApi";
+import { ApiSuccessResponse } from "@/types/common";
 import api from "./api";
 import dayjs from "dayjs";
 
