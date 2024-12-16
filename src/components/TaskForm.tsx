@@ -1,12 +1,12 @@
 import { VStack, SimpleGrid } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import { Save } from "@emotion-icons/fa-regular/Save";
-import InputField from "./form/InputField";
-import TextareaField from "./form/TextareaField";
-import PrimaryButton from "./PrimaryButton";
+import InputField from "@/components/form/InputField";
+import TextareaField from "@/components/form/TextareaField";
+import PrimaryButton from "@/components/PrimaryButton";
 import { CreateTaskInterface, PriorityLevelEnum } from "@/types/task";
-import { getTaskPriorityLabel, statesOfIndia } from "./utils";
-import SelectField from "./form/SelectField";
+import { getTaskPriorityLabel, statesOfIndia } from "@/components/utils";
+import SelectField from "@/components/form/SelectField";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 

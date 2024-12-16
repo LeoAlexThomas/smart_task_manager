@@ -11,6 +11,7 @@ import { TaskInterface } from "@/types/task";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import WithLoader from "@/components/WithLoader";
 import { KeyedMutator } from "swr";
+import { colors } from "@/components/utils";
 
 const HomePage = () => {
   const [searchText, setSearchText] = useState<string>("");
@@ -22,13 +23,19 @@ const HomePage = () => {
         <title>Home Page</title>
       </Head>
       <Layout
-        pageTitle="Task Manager"
+        pageTitle="Smart Task Manager"
         headerActions={
           <>
             <SearchTextInput
               searchText={searchText}
               onSearchTextChange={setSearchText}
               display={["none", null, "block"]}
+              _placeholder={{
+                color: colors.primaryColor[0],
+              }}
+              color={colors.primaryColor[0]}
+              border="1px solid"
+              borderColor={colors.primaryColor[0]}
             />
             <Box display={["block", null, "none"]}>
               <SearchMenuPopup

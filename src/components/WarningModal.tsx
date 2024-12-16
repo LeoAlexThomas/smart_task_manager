@@ -9,8 +9,8 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
-import DeleteButton from "./DeleteButton";
-import SecondaryButton from "./SecondaryButton";
+import DeleteButton from "@/components/DeleteButton";
+import SecondaryButton from "@/components/SecondaryButton";
 
 const WarningModal = ({
   isOpen,

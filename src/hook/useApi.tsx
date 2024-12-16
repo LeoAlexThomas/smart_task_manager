@@ -1,5 +1,5 @@
 import { usePageLoader } from "@/context/pageLoaderContext";
-import useCustomToast, { ToastStatusEnum } from "./useCustomToast";
+import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
 
 export function useApi() {
   const { onOpen: showPageLoader, onClose: hidePageLoader } = usePageLoader();

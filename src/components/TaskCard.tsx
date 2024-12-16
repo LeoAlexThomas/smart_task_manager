@@ -7,14 +7,14 @@ import {
   useBreakpointValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import { TaskInterface } from "./types/task";
-import { getPriorityColor, getTaskPriorityLabel } from "./utils";
+import { TaskInterface } from "@/types/task";
+import { getPriorityColor, getTaskPriorityLabel } from "@/components/utils";
 import { Edit } from "@emotion-icons/boxicons-solid/Edit";
 import { DeleteOutline } from "@emotion-icons/material/DeleteOutline";
 import dayjs from "dayjs";
 import Link from "next/link";
-import ImageWithText from "./ImageWithText";
-import WarningModal from "./WarningModal";
+import ImageWithText from "@/components/ImageWithText";
+import WarningModal from "@/components/WarningModal";
 
 const TaskCard = ({
   task,

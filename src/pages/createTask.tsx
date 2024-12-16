@@ -58,7 +58,7 @@ const CreateTask = () => {
       },
       onFailure: (err: any) => {
         showToast({
-          title: err.message ?? "Something went wrong",
+          title: err?.response?.data?.message ?? "Something went wrong",
           status: ToastStatusEnum.error,
         });
       },

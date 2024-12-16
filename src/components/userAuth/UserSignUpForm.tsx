@@ -1,14 +1,14 @@
 import { Box, chakra, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import InputField from "../form/InputField";
+import InputField from "@/components/form/InputField";
 import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
-import PrimaryButton from "../PrimaryButton";
+import PrimaryButton from "@/components/PrimaryButton";
 import { CreateUserInterface } from "@/types/user";
-import api from "../api";
+import api from "@/components/api";
 import { useApi } from "@/hook/useApi";
 import { ApiSuccessResponse, RegisterInfoResponse } from "@/types/common";
-import { setUserToken } from "../utils";
+import { setUserToken } from "@/components/utils";
 
 const UserSignUpForm = () => {
   const router = useRouter();
@@ -60,9 +60,9 @@ const UserSignUpForm = () => {
         });
         router.replace("/");
       },
-      onFailure: (err) => {
+      onFailure: (err: any) => {
         showToast({
-          title: (err as any).message,
+          title: err?.response?.data?.message,
           status: ToastStatusEnum.error,
         });
       },

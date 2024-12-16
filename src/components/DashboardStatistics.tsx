@@ -24,8 +24,8 @@ import { Doughnut } from "react-chartjs-2";
 import dayjs from "dayjs";
 import isEmpty from "lodash/isEmpty";
 import { TaskInterface } from "@/types/task";
-import EmptyTask from "./EmptyTask";
-import WithLoader from "./WithLoader";
+import EmptyTask from "@/components/EmptyTask";
+import WithLoader from "@/components/WithLoader";
 
 ChartJS.register(
   ArcElement,

@@ -2,7 +2,7 @@ import DashboardStatistics from "@/components/DashboardStatistics";
 import EmptyTask from "@/components/EmptyTask";
 import Layout from "@/components/Layout";
 import TaskList from "@/components/TaskList";
-import { TaskInterface } from "@/components/types/task";
+import { TaskInterface } from "@/types/task";
 import WithLoader from "@/components/WithLoader";
 import {
   Tabs,

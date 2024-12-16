@@ -1,9 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useLoginCheck } from "./loginCheck";
+import { useLoginCheck } from "@/context/loginCheck";
 import api from "@/components/api";
-import { useApi } from "../hook/useApi";
-import { ApiSuccessResponse } from "../types/common";
-import { UserInterface } from "../types/user";
+import { useApi } from "@/hook/useApi";
+import { ApiSuccessResponse } from "@/types/common";
+import { UserInterface } from "@/types/user";
 
 interface ContextInterface {
   userEmail: string;

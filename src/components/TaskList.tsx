@@ -1,12 +1,12 @@
 import { SimpleGrid } from "@chakra-ui/react";
 import { Fragment } from "react";
-import TaskCard from "./TaskCard";
+import TaskCard from "@/components/TaskCard";
 import { TaskInterface } from "@/types/task";
 import { KeyedMutator } from "swr";
 import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
 import { useApi } from "@/hook/useApi";
 import { ApiSuccessResponse } from "@/types/common";
-import api from "./api";
+import api from "@/components/api";
 import dayjs from "dayjs";
 
 const TaskList = ({
@@ -39,7 +39,7 @@ const TaskList = ({
       onFailure: (err: any) => {
         taskListMutate();
         showToast({
-          title: err.message ?? "Something went wrong",
+          title: err?.response?.data?.message ?? "Something went wrong",
           status: ToastStatusEnum.error,
         });
       },
@@ -82,7 +82,7 @@ const TaskList = ({
       onFailure: (err: any) => {
         taskListMutate();
         showToast({
-          title: err.message ?? "Something went wrong",
+          title: err?.response?.data?.message ?? "Something went wrong",
           status: ToastStatusEnum.error,
         });
       },

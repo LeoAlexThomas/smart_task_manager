@@ -2,7 +2,7 @@ import EmptyTask from "@/components/EmptyTask";
 import ImageWithText from "@/components/ImageWithText";
 import Layout from "@/components/Layout";
 import PrimaryButton from "@/components/PrimaryButton";
-import { TaskInterface } from "@/components/types/task";
+import { TaskInterface } from "@/types/task";
 import { getPriorityColor, getTaskPriorityLabel } from "@/components/utils";
 import {
   VStack,
@@ -22,12 +22,10 @@ import { DeleteOutline } from "@emotion-icons/material/DeleteOutline";
 import Link from "next/link";
 import DeleteButton from "@/components/DeleteButton";
 import WarningModal from "@/components/WarningModal";
-import { ApiSuccessResponse, ErrorResponse } from "@/components/types/common";
+import { ApiSuccessResponse, ErrorResponse } from "@/types/common";
 import ErrorMsg from "@/components/ErrorMsg";
-import useCustomToast, {
-  ToastStatusEnum,
-} from "@/components/hook/useCustomToast";
-import { useApi } from "@/components/hook/useApi";
+import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
+import { useApi } from "@/hook/useApi";
 import WithLoader from "@/components/WithLoader";
 import api from "@/components/api";
 import { KeyedMutator } from "swr";
@@ -57,7 +55,7 @@ const TaskDetails = () => {
       onFailure: (err: any) => {
         onClose();
         showToast({
-          title: err.message ?? "Something went wrong",
+          title: err?.response?.data?.message ?? "Something went wrong",
           status: ToastStatusEnum.error,
         });
       },
@@ -92,7 +90,7 @@ const TaskDetails = () => {
       onFailure: (err: any) => {
         mutate();
         showToast({
-          title: err.message ?? "Something went wrong",
+          title: err?.response?.data?.message ?? "Something went wrong",
           status: ToastStatusEnum.error,
         });
       },

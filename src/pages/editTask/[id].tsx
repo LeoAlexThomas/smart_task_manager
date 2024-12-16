@@ -1,16 +1,14 @@
 import Layout from "@/components/Layout";
-import { CreateTaskInterface, TaskInterface } from "@/components/types/task";
+import { CreateTaskInterface, TaskInterface } from "@/types/task";
 import dayjs from "dayjs";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import TaskForm from "@/components/TaskForm";
-import { useApi } from "@/components/hook/useApi";
-import useCustomToast, {
-  ToastStatusEnum,
-} from "@/components/hook/useCustomToast";
+import { useApi } from "@/hook/useApi";
+import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
 import WithLoader from "@/components/WithLoader";
 import api from "@/components/api";
-import { ApiSuccessResponse } from "@/components/types/common";
+import { ApiSuccessResponse } from "@/types/common";
 
 const EditTask = () => {
   const router = useRouter();
@@ -26,7 +24,7 @@ const EditTask = () => {
           method: "PUT",
           data: values,
         }),
-      onSuccess: (res) => {
+      onSuccess: (res: ApiSuccessResponse<{}>) => {
         if (res.isSuccess) {
           showToast({
             title: res.message,
@@ -42,7 +40,7 @@ const EditTask = () => {
       },
       onFailure: (err: any) => {
         showToast({
-          title: err.message ?? "Something went wrong",
+          title: err?.response?.data?.message ?? "Something went wrong",
           status: ToastStatusEnum.error,
         });
       },

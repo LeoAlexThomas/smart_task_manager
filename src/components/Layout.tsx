@@ -1,7 +1,8 @@
 import { SimpleGrid, VStack, Box } from "@chakra-ui/react";
-import Header from "./Header";
-import SideBar from "./SideBar";
-import NavBar from "./NavBar";
+import Header from "@/components/Header";
+import SideBar from "@/components/SideBar";
+import NavBar from "@/components/NavBar";
+import { colors } from "@/components/utils";
 
 const Layout = ({
   pageTitle,
@@ -13,7 +14,7 @@ const Layout = ({
   children: React.ReactElement;
 }) => {
   return (
-    <VStack alignItems="stretch" spacing={0}>
+    <VStack alignItems="stretch" spacing={0} bg={colors.primaryColor[0]}>
       <Header title={pageTitle} actions={headerActions} />
       <SimpleGrid
         templateColumns={["minmax(0,1fr)", null, "250px minmax(0,1fr)"]}

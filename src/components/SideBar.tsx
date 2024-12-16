@@ -1,9 +1,9 @@
 import { HStack, Image, Text, VStack } from "@chakra-ui/react";
-import { SideBarMenu } from "./types/common";
+import { SideBarMenu } from "@/types/common";
 import { Fragment } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { menus } from "./utils";
+import { menus, colors } from "@/components/utils";
 
 const SideBar = () => {
   return (
@@ -13,6 +13,7 @@ const SideBar = () => {
       py={4}
       boxShadow="0px 0px 4px 1px #00000020"
       display={["none", null, "flex"]}
+      bg={colors.secondaryColor[1]}
     >
       {menus.map((menu, index) => {
         return (
@@ -35,9 +36,11 @@ const MenuTile = ({ menu }: { menu: SideBarMenu }) => {
     <Link href={menu.url} passHref>
       <HStack
         p={4}
-        bgColor={isMenuSelected ? "#00000060" : "transparent"}
+        bgColor={isMenuSelected ? colors.secondaryColor[5] : "transparent"}
         _hover={{
-          bgColor: isMenuSelected ? "#00000060" : "#00000030",
+          bgColor: isMenuSelected
+            ? colors.secondaryColor[5]
+            : colors.secondaryColor[2],
         }}
         spacing="12px"
       >
@@ -49,9 +52,9 @@ const MenuTile = ({ menu }: { menu: SideBarMenu }) => {
         />
         <Text
           fontSize={["12px", null, "16px"]}
-          fontWeight={isMenuSelected ? 700 : 400}
+          fontWeight={isMenuSelected ? 800 : 500}
           lineHeight="1.17"
-          color={isMenuSelected ? "#FFFFFF" : "#000000"}
+          color={colors.primaryColor[0]}
         >
           {menu.name}
         </Text>
