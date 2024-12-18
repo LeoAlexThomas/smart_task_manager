@@ -1,9 +1,7 @@
 import { VStack, SimpleGrid } from "@chakra-ui/react";
 import dayjs from "dayjs";
-import { Save } from "@emotion-icons/fa-regular/Save";
 import InputField from "@/components/form/InputField";
 import TextareaField from "@/components/form/TextareaField";
-import PrimaryButton from "@/components/PrimaryButton";
 import { CreateTaskInterface, PriorityLevelEnum } from "@/types/task";
 import { getTaskPriorityLabel, statesOfIndia } from "@/components/utils";
 import SelectField from "@/components/form/SelectField";
@@ -11,9 +9,11 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
 const TaskForm = ({
+  formId,
   defaultValues,
   onSubmit,
 }: {
+  formId: string;
   defaultValues?: CreateTaskInterface;
   onSubmit: (value: CreateTaskInterface) => void;
 }) => {
@@ -27,7 +27,7 @@ const TaskForm = ({
   }, [defaultValues]);
 
   return (
-    <form onSubmit={hForm.handleSubmit(onSubmit)}>
+    <form id={formId} onSubmit={hForm.handleSubmit(onSubmit)}>
       <VStack alignItems="stretch" spacing={["12px", null, "16px"]} p={4}>
         <InputField
           hForm={hForm}
@@ -88,22 +88,6 @@ const TaskForm = ({
             value: state,
           }))}
         />
-        <PrimaryButton
-          leftIcon={<Save width="25px" height="25px" color="white" />}
-          maxW={["auto", null, "200px"]}
-          alignSelf={["stretch", null, "flex-end"]}
-          _hover={{
-            bgColor: "blue.600",
-          }}
-          pos={["fixed", null, "relative"]}
-          bottom={["85px", null, 0]}
-          left={[4, null, 0]}
-          right={[4, null, 0]}
-          px={4}
-          type="submit"
-        >
-          Save
-        </PrimaryButton>
       </VStack>
     </form>
   );

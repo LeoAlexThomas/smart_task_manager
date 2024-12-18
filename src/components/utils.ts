@@ -28,6 +28,9 @@ export const colors = {
   ],
 };
 
+export const createTaskFormId = "createTaskFormId";
+export const editTaskFormId = "editTaskFormId";
+
 export const userTokenCookieName = "userToken";
 
 export const unAutherizedPath = ["/signIn/"];

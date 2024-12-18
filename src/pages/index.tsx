@@ -12,16 +12,26 @@ import FloatingActionButton from "@/components/FloatingActionButton";
 import WithLoader from "@/components/WithLoader";
 import { KeyedMutator } from "swr";
 import { colors } from "@/components/utils";
+import CreateTaskModel from "@/components/CustomTaskModel";
 
 const HomePage = () => {
   const [searchText, setSearchText] = useState<string>("");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isCreateTaskModalOpen,
+    onOpen: onCreateTaskModalOpen,
+    onClose: onCreateTaskModalClose,
+  } = useDisclosure();
 
   return (
     <Box bg="white" h="100vh">
       <Head>
         <title>Home Page</title>
       </Head>
+      <CreateTaskModel
+        isOpen={isCreateTaskModalOpen}
+        onClose={onCreateTaskModalClose}
+      />
       <Layout
         pageTitle="Smart Task Manager"
         headerActions={
@@ -72,9 +82,10 @@ const HomePage = () => {
           </WithLoader>
 
           <FloatingActionButton
-            pageLink={`/createTask/${
-              isEmpty(searchText) ? "" : `?title=${searchText}`
-            }`}
+            onClick={onCreateTaskModalOpen}
+            // pageLink={`/createTask/${
+            //   isEmpty(searchText) ? "" : `?title=${searchText}`
+            // }`}
           />
         </>
       </Layout>

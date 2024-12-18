@@ -8,6 +8,7 @@ import TaskForm from "@/components/TaskForm";
 import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
 import { useApi } from "@/hook/useApi";
 import api from "@/components/api";
+import { createTaskFormId } from "@/components/utils";
 
 const defaultTaskValues: CreateTaskInterface = {
   title: "",
@@ -72,6 +73,7 @@ const CreateTask = () => {
       </Head>
       <Layout pageTitle="Add Task">
         <TaskForm
+          formId={createTaskFormId}
           defaultValues={{ ...defaultTaskValues, title: title ?? "" }}
           onSubmit={onSubmit}
         />

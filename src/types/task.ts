@@ -13,7 +13,13 @@ export interface TaskInterface {
   priorityLevel: PriorityLevelEnum;
   location: string;
   isCompleted: boolean;
+  project: CustomSelectModel;
   completedDate: string | null;
+}
+
+export interface CustomSelectModel {
+  label: string;
+  value: string;
 }
 
 export interface CreateTaskInterface {
