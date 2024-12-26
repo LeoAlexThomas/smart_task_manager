@@ -1,26 +1,32 @@
 import EmptyTask from "@/components/EmptyTask";
-import { Box, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  StackProps,
+  Text,
+  useDisclosure,
+  VStack,
+  Image,
+  Spacer,
+  StackDivider,
+  chakra,
+} from "@chakra-ui/react";
 import { isEmpty } from "lodash";
 import Head from "next/head";
-import { useState } from "react";
 import Layout from "@/components/Layout";
-import SearchMenuPopup from "@/components/SearchMenuPopup";
-import SearchTextInput from "@/components/SearchTextInput";
 import TaskList from "@/components/TaskList";
 import { TaskInterface } from "@/types/task";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import WithLoader from "@/components/WithLoader";
 import { KeyedMutator } from "swr";
-import { colors } from "@/components/utils";
 import CreateTaskModel from "@/components/CustomTaskModel";
+import { ProjectInterface } from "@/types/project";
+import CreateProjectModel from "@/components/CreateProjectModel";
 
 const HomePage = () => {
-  const [searchText, setSearchText] = useState<string>("");
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const {
-    isOpen: isCreateTaskModalOpen,
-    onOpen: onCreateTaskModalOpen,
-    onClose: onCreateTaskModalClose,
+    isOpen: isCreateProjectModalOpen,
+    onOpen: onCreateProjectModalOpen,
+    onClose: onCreateProjectModalClose,
   } = useDisclosure();
 
   return (
@@ -28,53 +34,30 @@ const HomePage = () => {
       <Head>
         <title>Home Page</title>
       </Head>
-      <CreateTaskModel
+      {/* <CreateTaskModel
         isOpen={isCreateTaskModalOpen}
         onClose={onCreateTaskModalClose}
+      /> */}
+      <CreateProjectModel
+        isOpen={isCreateProjectModalOpen}
+        onClose={onCreateProjectModalClose}
       />
-      <Layout
-        pageTitle="Smart Task Manager"
-        headerActions={
-          <>
-            <SearchTextInput
-              searchText={searchText}
-              onSearchTextChange={setSearchText}
-              display={["none", null, "block"]}
-              _placeholder={{
-                color: colors.primaryColor[0],
-              }}
-              color={colors.primaryColor[0]}
-              border="1px solid"
-              borderColor={colors.primaryColor[0]}
-            />
-            <Box display={["block", null, "none"]}>
-              <SearchMenuPopup
-                isOpen={isOpen}
-                onClose={onClose}
-                onOpen={onOpen}
-                searchText={searchText}
-                onSearchChange={setSearchText}
-                placement="bottom-start"
-              />
-            </Box>
-          </>
-        }
-      >
+      <Layout pageTitle="Smart Task Manager">
         <>
-          <WithLoader apiUrl={`/getTasks/?searchText=${searchText}`}>
+          <WithLoader apiUrl={`/project/all/`}>
             {({
-              data: tasks,
+              data: projects,
               mutate,
             }: {
-              data: TaskInterface[];
-              mutate: KeyedMutator<TaskInterface[]>;
+              data: ProjectInterface[];
+              mutate: KeyedMutator<ProjectInterface[]>;
             }) => {
               return (
                 <>
-                  {isEmpty(tasks) ? (
-                    <EmptyTask searchText={searchText} showAddLink />
+                  {isEmpty(projects) ? (
+                    <EmptyProject />
                   ) : (
-                    <TaskList tasks={tasks} taskListMutate={mutate} />
+                    <ProjectList projects={projects} />
                   )}
                 </>
               );
@@ -82,7 +65,7 @@ const HomePage = () => {
           </WithLoader>
 
           <FloatingActionButton
-            onClick={onCreateTaskModalOpen}
+            onClick={onCreateProjectModalOpen}
             // pageLink={`/createTask/${
             //   isEmpty(searchText) ? "" : `?title=${searchText}`
             // }`}
@@ -90,6 +73,90 @@ const HomePage = () => {
         </>
       </Layout>
     </Box>
+  );
+};
+
+const EmptyProject = ({
+  message,
+  showAddLink,
+  ...props
+}: {
+  message?: React.ReactNode;
+  showAddLink?: boolean;
+} & StackProps) => {
+  return (
+    <VStack h="100%" justifyContent="center" {...props}>
+      <Image
+        src="https://img.icons8.com/pastel-glyph/64/website-error.png"
+        w={["30px", null, "70px"]}
+        h={["30px", null, "70px"]}
+        alt=""
+      />
+      {message ?? (
+        <Text
+          fontSize={["12px", null, "16px"]}
+          lineHeight="1.17"
+          color="#00000070"
+          textAlign="center"
+        >
+          No Project Found...
+        </Text>
+      )}
+    </VStack>
+  );
+};
+
+const ProjectList = ({ projects }: { projects: ProjectInterface[] }) => {
+  return (
+    <VStack alignItems="stretch" spacing={4}>
+      <Text
+        fontFamily="Playfair Display"
+        fontSize="32px"
+        fontWeight={700}
+        lineHeight="1.25"
+      >
+        Projects
+      </Text>
+
+      <VStack alignItems="start">
+        {projects.map((project) => {
+          return (
+            <VStack
+              boxShadow="0px 0px 5px black"
+              p={4}
+              borderRadius="8px"
+              alignItems="stretch"
+              maxW="450px"
+            >
+              <Text
+                fontFamily="Playfair Display"
+                fontSize="24px"
+                fontWeight={600}
+              >
+                {project.title}
+              </Text>
+              <Text
+                fontFamily="Noto Serif"
+                fontSize="16px"
+                fontWeight={500}
+                lineHeight="1.25"
+              >
+                {project.description}
+              </Text>
+              <Text
+                fontFamily="Noto Serif"
+                fontSize="16px"
+                fontWeight={500}
+                lineHeight="1.25"
+              >
+                <chakra.span fontWeight={700}>Members :</chakra.span>{" "}
+                {project.members.map((user) => user.userName).join(", ")}
+              </Text>
+            </VStack>
+          );
+        })}
+      </VStack>
+    </VStack>
   );
 };
 

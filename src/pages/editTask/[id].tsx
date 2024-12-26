@@ -21,7 +21,7 @@ const EditTask = () => {
   const onSubmit = (values: CreateTaskInterface, taskId: string) => {
     makeApiCall<ApiSuccessResponse<{}>>({
       apiFn: () =>
-        api(`/updateTask/${taskId}`, {
+        api(`/task/update/${taskId}`, {
           method: "PUT",
           data: values,
         }),
@@ -54,7 +54,7 @@ const EditTask = () => {
         <title>Edit Task</title>
       </Head>
       <Layout pageTitle="Edit Task">
-        <WithLoader apiUrl={queryTaskId ? `/getTask/${queryTaskId}` : ""}>
+        <WithLoader apiUrl={queryTaskId ? `/task/${queryTaskId}` : ""}>
           {({ data }: { data: TaskInterface }) => {
             return (
               <TaskForm

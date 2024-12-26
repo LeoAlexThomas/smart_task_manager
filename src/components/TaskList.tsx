@@ -26,7 +26,7 @@ const TaskList = ({
     );
     makeApiCall<ApiSuccessResponse<{}>>({
       apiFn: () =>
-        api(`/deleteTask/${taskId}`, {
+        api(`/task/delete/${taskId}`, {
           method: "DELETE",
         }),
       onSuccess: (res) => {
@@ -67,7 +67,7 @@ const TaskList = ({
 
     makeApiCall({
       apiFn: () =>
-        api(`/updateTask/${updatableTask._id}`, {
+        api(`/task/update/${updatableTask._id}`, {
           method: "PUT",
           data: requestObj,
         }),

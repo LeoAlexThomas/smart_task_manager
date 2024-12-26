@@ -39,7 +39,7 @@ ChartJS.register(
 
 const DashboardStatistics = () => {
   return (
-    <WithLoader apiUrl="/getTasks">
+    <WithLoader apiUrl="/task/all">
       {({ data: tasks }: { data: TaskInterface[] }) => {
         if (isEmpty(tasks)) {
           return <EmptyTask showAddLink h="50vh" />;

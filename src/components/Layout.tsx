@@ -6,16 +6,14 @@ import { colors } from "@/components/utils";
 
 const Layout = ({
   pageTitle,
-  headerActions,
   children,
 }: {
   pageTitle: string;
-  headerActions?: React.ReactNode;
   children: React.ReactElement;
 }) => {
   return (
     <VStack alignItems="stretch" spacing={0} bg={colors.primaryColor[0]}>
-      <Header title={pageTitle} actions={headerActions} />
+      <Header title={pageTitle} />
       <SimpleGrid
         templateColumns={["minmax(0,1fr)", null, "250px minmax(0,1fr)"]}
         spacing="12px"

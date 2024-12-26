@@ -61,7 +61,7 @@ const Dashboard = () => {
               <DashboardStatistics />
             </TabPanel>
             <TabPanel px={0}>
-              <WithLoader apiUrl="/getTasks">
+              <WithLoader apiUrl="/task/all">
                 {({
                   data: tasks,
                   mutate,
@@ -90,7 +90,7 @@ const Dashboard = () => {
               </WithLoader>
             </TabPanel>
             <TabPanel px={0}>
-              <WithLoader apiUrl="/getTasks">
+              <WithLoader apiUrl="/task/all">
                 {({
                   data: tasks,
                   mutate,
@@ -119,7 +119,7 @@ const Dashboard = () => {
               </WithLoader>
             </TabPanel>
             <TabPanel px={0}>
-              <WithLoader apiUrl="/getTasks">
+              <WithLoader apiUrl="/task/all">
                 {({
                   data: tasks,
                   mutate,

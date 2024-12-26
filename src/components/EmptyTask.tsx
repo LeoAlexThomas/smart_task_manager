@@ -1,14 +1,10 @@
-import { VStack, Text, chakra, Image, StackProps } from "@chakra-ui/react";
-import isEmpty from "lodash/isEmpty";
-import Link from "next/link";
+import { VStack, Text, Image, StackProps } from "@chakra-ui/react";
 
 const EmptyTask = ({
-  searchText,
   message,
   showAddLink,
   ...props
 }: {
-  searchText?: string;
   message?: React.ReactNode;
   showAddLink?: boolean;
 } & StackProps) => {
@@ -27,28 +23,8 @@ const EmptyTask = ({
           color="#00000070"
           textAlign="center"
         >
-          No Task Found...{" "}
-          <chakra.span fontStyle="italic">
-            {isEmpty(searchText) ? "" : ` for ${searchText}`}
-          </chakra.span>
+          No Task Found...
         </Text>
-      )}
-      {showAddLink && (
-        <Link
-          href={`/createTask/${
-            isEmpty(searchText) ? "" : `?title=${searchText}`
-          }`}
-          passHref
-        >
-          <Text
-            fontSize={["12px", null, "16px"]}
-            lineHeight="1.17"
-            color="blue"
-            textDecoration="underline"
-          >
-            Try add task
-          </Text>
-        </Link>
       )}
     </VStack>
   );

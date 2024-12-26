@@ -39,7 +39,7 @@ const CreateTask = () => {
   const onSubmit = async (values: CreateTaskInterface) => {
     makeApiCall({
       apiFn: () =>
-        api("/createTask", {
+        api("/task/create", {
           method: "POST",
           data: { ...values, isCompleted: false },
         }),

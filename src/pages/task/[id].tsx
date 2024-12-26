@@ -41,7 +41,7 @@ const TaskDetails = () => {
   const handleDelete = (taskId: string) => {
     makeApiCall<ApiSuccessResponse<{}>>({
       apiFn: () =>
-        api(`/deleteTask/${taskId}`, {
+        api(`/task/delete/${taskId}`, {
           method: "DELETE",
         }),
       onSuccess: (res: any) => {
@@ -75,7 +75,7 @@ const TaskDetails = () => {
     mutate(requestObj, { revalidate: false });
     makeApiCall({
       apiFn: () =>
-        api(`/updateTask/${updatableTask._id}`, {
+        api(`/task/update/${updatableTask._id}`, {
           method: "PUT",
           data: requestObj,
         }),
@@ -105,7 +105,7 @@ const TaskDetails = () => {
       <Layout pageTitle="Task Details">
         <>
           <WithLoader
-            apiUrl={queryTaskId ? `/getTask/${queryTaskId}` : ""}
+            apiUrl={queryTaskId ? `/task/${queryTaskId}` : ""}
             customError={({ err }: { err: ErrorResponse }) => {
               if (err.message === "Task not found") {
                 return <EmptyTask />;

@@ -30,6 +30,7 @@ export const colors = {
 
 export const createTaskFormId = "createTaskFormId";
 export const editTaskFormId = "editTaskFormId";
+export const createProjectFormId = "createProjectFormId";
 
 export const userTokenCookieName = "userToken";
 

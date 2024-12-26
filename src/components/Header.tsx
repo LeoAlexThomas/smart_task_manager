@@ -4,13 +4,7 @@ import { ArrowIosBack } from "@emotion-icons/evaicons-solid/ArrowIosBack";
 import UserProfile from "@/components/UserProfile";
 import { colors } from "@/components/utils";
 
-const Header = ({
-  title,
-  actions,
-}: {
-  title: string;
-  actions?: React.ReactNode;
-}) => {
+const Header = ({ title }: { title: string }) => {
   const router = useRouter();
   const showBack = router.asPath !== "/";
   const handleBack = () => {
@@ -55,9 +49,7 @@ const Header = ({
             {title}
           </Text>
         </SimpleGrid>
-        <HStack gap={[4, null, 8]}>
-          {actions} <UserProfile />
-        </HStack>
+        <UserProfile />
       </HStack>
     </Box>
   );
