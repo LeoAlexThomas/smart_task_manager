@@ -16,6 +16,9 @@ import { colors, createProjectFormId } from "./utils";
 import CustomReactAsyncSelectField from "./form/CustomReactAsyncSelectField";
 import api from "./api";
 import { UserInterface } from "@/types/user";
+import { useApi } from "@/hook/useApi";
+import { ApiSuccessResponse } from "@/types/common";
+import isArray from "lodash/isArray";
 
 const CreateProjectModel = ({
   isOpen,
@@ -24,21 +27,40 @@ const CreateProjectModel = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
+  const { makeApiCall } = useApi();
   const projectForm = useForm<CreateProjectInterface>({
     mode: "onChange",
     defaultValues: {
       title: "",
       description: "",
-      members: [],
+      memberIds: [],
     },
   });
 
   const onSubmit = (values: CreateProjectInterface) => {
-    console.log("Project form: ", values);
+    const requestObj = {
+      ...values,
+      title: values.title.trim(),
+      members: values.memberIds.map((member) => member.value),
+    };
+    makeApiCall<ApiSuccessResponse<{}>>({
+      apiFn: () => api(`/project/create`, { method: "POST", data: requestObj }),
+      successMsg: {
+        title: "Project created successfully",
+      },
+      onSuccess: (res) => {
+        handleModalClose();
+      },
+    });
+  };
+
+  const handleModalClose = () => {
+    projectForm.reset();
+    onClose();
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleModalClose} isCentered size="lg">
       <ModalContent>
         <ModalHeader>Create Project</ModalHeader>
         <ModalCloseButton />
@@ -65,16 +87,22 @@ const CreateProjectModel = ({
               />
               <CustomReactAsyncSelectField
                 hForm={projectForm}
-                name="members"
+                name="memberIds"
+                title="Members"
                 isMultiChoice
-                rules={{ required: true }}
+                rules={{ required: false }}
                 getOptions={(value) =>
                   api(`/user/all?searchText=${value}`).then(
-                    (values: UserInterface[]) =>
-                      values.map((user) => ({
+                    (values: UserInterface[]) => {
+                      if (!isArray(values)) {
+                        return [];
+                      }
+                      console.log("Searching... ", values);
+                      return values.map((user) => ({
                         label: user.name,
-                        value: user.id,
-                      }))
+                        value: user._id,
+                      }));
+                    }
                   )
                 }
               />

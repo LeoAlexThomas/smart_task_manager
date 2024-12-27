@@ -36,8 +36,8 @@ export const UserInfoProvider = ({
         }),
       hideMessage: true,
       onSuccess: (res) => {
-        setUserName(res.data.userName);
-        setUserEmail(res.data.userEmail);
+        setUserName(res.data.name);
+        setUserEmail(res.data.email);
       },
     });
   }, [isLoggedIn]);

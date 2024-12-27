@@ -13,7 +13,7 @@ export interface TaskInterface {
   priorityLevel: PriorityLevelEnum;
   location: string;
   isCompleted: boolean;
-  project: CustomSelectModel;
+  projectId: string;
   completedDate: string | null;
 }
 
@@ -28,4 +28,5 @@ export interface CreateTaskInterface {
   endDate: string; // ISO string
   priorityLevel: PriorityLevelEnum | ""; // "" is for default value in form value
   location: string;
+  projectId: string;
 }

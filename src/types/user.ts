@@ -1,12 +1,12 @@
 export interface CreateUserInterface {
-  userName: string;
-  userEmail: string;
+  name: string;
+  email: string;
   password: string;
   confirmPassword: string;
 }
 
 export interface UserInterface {
-  id: string;
+  _id: string;
   name: string;
   email: string;
 }

@@ -17,8 +17,8 @@ const UserSignUpForm = () => {
   const hForm = useForm<CreateUserInterface>({
     mode: "onChange",
     defaultValues: {
-      userName: "",
-      userEmail: "",
+      name: "",
+      email: "",
       password: "",
       confirmPassword: "",
     },
@@ -45,8 +45,8 @@ const UserSignUpForm = () => {
         api("/user/register", {
           method: "POST",
           data: {
-            userName: values.userName,
-            email: values.userEmail,
+            name: values.name,
+            email: values.email,
             password: values.password,
           },
         }),
@@ -84,14 +84,14 @@ const UserSignUpForm = () => {
       >
         <InputField
           hForm={hForm}
-          name="userName"
+          name="name"
           title="User Name"
           rules={{ required: true }}
           placeholder="Enter your name..."
         />
         <InputField
           hForm={hForm}
-          name="userEmail"
+          name="email"
           title="User Email"
           type="email"
           rules={{ required: true }}

@@ -5,7 +5,8 @@ import {
   useDisclosure,
   VStack,
   Image,
-  chakra,
+  SimpleGrid,
+  HStack,
 } from "@chakra-ui/react";
 import { isEmpty } from "lodash";
 import Head from "next/head";
@@ -15,6 +16,8 @@ import WithLoader from "@/components/WithLoader";
 import { KeyedMutator } from "swr";
 import { ProjectInterface } from "@/types/project";
 import CreateProjectModel from "@/components/CreateProjectModel";
+import ProjectCard from "@/components/project/ProjectCard";
+import { Fragment } from "react";
 
 const HomePage = () => {
   const {
@@ -103,53 +106,26 @@ const EmptyProject = ({
 const ProjectList = ({ projects }: { projects: ProjectInterface[] }) => {
   return (
     <VStack alignItems="stretch" spacing={4}>
-      <Text
-        fontFamily="Playfair Display"
-        fontSize="32px"
-        fontWeight={700}
-        lineHeight="1.25"
-      >
-        Projects
-      </Text>
+      <HStack justifyContent="space-between" spacing={4}>
+        <Text
+          fontFamily="Playfair Display"
+          fontSize="32px"
+          fontWeight={700}
+          lineHeight="1.25"
+        >
+          Projects
+        </Text>
+      </HStack>
 
-      <VStack alignItems="start">
+      <SimpleGrid columns={[1, 2, 3]}>
         {projects.map((project) => {
           return (
-            <VStack
-              boxShadow="0px 0px 5px black"
-              p={4}
-              borderRadius="8px"
-              alignItems="stretch"
-              maxW="450px"
-            >
-              <Text
-                fontFamily="Playfair Display"
-                fontSize="24px"
-                fontWeight={600}
-              >
-                {project.title}
-              </Text>
-              <Text
-                fontFamily="Noto Serif"
-                fontSize="16px"
-                fontWeight={500}
-                lineHeight="1.25"
-              >
-                {project.description}
-              </Text>
-              <Text
-                fontFamily="Noto Serif"
-                fontSize="16px"
-                fontWeight={500}
-                lineHeight="1.25"
-              >
-                <chakra.span fontWeight={700}>Members :</chakra.span>{" "}
-                {project.members.map((user) => user.name).join(", ")}
-              </Text>
-            </VStack>
+            <Fragment key={project._id}>
+              <ProjectCard project={project} />
+            </Fragment>
           );
         })}
-      </VStack>
+      </SimpleGrid>
     </VStack>
   );
 };
