@@ -1,11 +1,24 @@
 import AsyncSelect from "react-select/async";
-import api from "./api";
-import { UserInterface } from "@/types/user";
+import { CustomSelectOptions } from "@/types/common";
 
-const CustomReactAsyncSelect = () => {
+const CustomReactAsyncSelect = ({
+  isMultiChoice,
+  getOptions,
+}: {
+  isMultiChoice: boolean;
+  getOptions: (val: string) => Promise<CustomSelectOptions[]>;
+}) => {
   return (
     <AsyncSelect
-      loadOptions={(val: string) => api(`/user/all?searchText=${val}`).then((users: UserInterface[]) => users.map((user) => ({ value: user., label })))}
+      cacheOptions
+      defaultOptions
+      isMulti={isMultiChoice}
+      onChange={(val: any) => {
+        console.log("Selected Value: ", val);
+      }}
+      loadOptions={getOptions}
     />
   );
 };
+
+export default CustomReactAsyncSelect;

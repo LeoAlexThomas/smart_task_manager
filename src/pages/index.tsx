@@ -1,4 +1,3 @@
-import EmptyTask from "@/components/EmptyTask";
 import {
   Box,
   StackProps,
@@ -6,19 +5,14 @@ import {
   useDisclosure,
   VStack,
   Image,
-  Spacer,
-  StackDivider,
   chakra,
 } from "@chakra-ui/react";
 import { isEmpty } from "lodash";
 import Head from "next/head";
 import Layout from "@/components/Layout";
-import TaskList from "@/components/TaskList";
-import { TaskInterface } from "@/types/task";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import WithLoader from "@/components/WithLoader";
 import { KeyedMutator } from "swr";
-import CreateTaskModel from "@/components/CustomTaskModel";
 import { ProjectInterface } from "@/types/project";
 import CreateProjectModel from "@/components/CreateProjectModel";
 
@@ -150,7 +144,7 @@ const ProjectList = ({ projects }: { projects: ProjectInterface[] }) => {
                 lineHeight="1.25"
               >
                 <chakra.span fontWeight={700}>Members :</chakra.span>{" "}
-                {project.members.map((user) => user.userName).join(", ")}
+                {project.members.map((user) => user.name).join(", ")}
               </Text>
             </VStack>
           );

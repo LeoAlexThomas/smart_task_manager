@@ -6,9 +6,9 @@ export interface CreateUserInterface {
 }
 
 export interface UserInterface {
-  userId: string;
-  userName: string;
-  userEmail: string;
+  id: string;
+  name: string;
+  email: string;
 }
 
 export interface SignInUserInterface {

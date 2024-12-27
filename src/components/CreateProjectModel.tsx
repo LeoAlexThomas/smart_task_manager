@@ -13,6 +13,9 @@ import {
 import { useForm } from "react-hook-form";
 import InputField from "./form/InputField";
 import { colors, createProjectFormId } from "./utils";
+import CustomReactAsyncSelectField from "./form/CustomReactAsyncSelectField";
+import api from "./api";
+import { UserInterface } from "@/types/user";
 
 const CreateProjectModel = ({
   isOpen,
@@ -59,6 +62,21 @@ const CreateProjectModel = ({
                 name="description"
                 title="Description"
                 rules={{ required: true }}
+              />
+              <CustomReactAsyncSelectField
+                hForm={projectForm}
+                name="members"
+                isMultiChoice
+                rules={{ required: true }}
+                getOptions={(value) =>
+                  api(`/user/all?searchText=${value}`).then(
+                    (values: UserInterface[]) =>
+                      values.map((user) => ({
+                        label: user.name,
+                        value: user.id,
+                      }))
+                  )
+                }
               />
             </VStack>
           </form>
