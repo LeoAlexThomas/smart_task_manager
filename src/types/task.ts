@@ -4,6 +4,13 @@ export enum PriorityLevelEnum {
   high = "high",
 }
 
+export enum TaskStatusEnum {
+  todo = "todo",
+  inProcess = "inProcess",
+  completed = "completed",
+  blocked = "blocked",
+}
+
 export interface TaskInterface {
   _id: string;
   title: string;
@@ -15,6 +22,7 @@ export interface TaskInterface {
   isCompleted: boolean;
   projectId: string;
   completedDate: string | null;
+  status: TaskStatusEnum;
 }
 
 export interface CustomSelectModel {

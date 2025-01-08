@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import InputField from "@/components/form/InputField";
 import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
-import PrimaryButton from "@/components/PrimaryButton";
+import { PrimaryButton } from "@/components/Buttons";
 import { SignInUserInterface } from "@/types/user";
 import api from "@/components/api";
 import { useApi } from "@/hook/useApi";

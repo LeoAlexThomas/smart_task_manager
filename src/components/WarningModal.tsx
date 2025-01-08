@@ -10,7 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import DeleteButton from "@/components/DeleteButton";
-import SecondaryButton from "@/components/SecondaryButton";
+import { SecondaryButton } from "@/components/Buttons";
 
 const WarningModal = ({
   isOpen,

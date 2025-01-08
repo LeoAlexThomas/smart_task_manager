@@ -28,7 +28,7 @@ function WithLoader<T>({
     return (
       customError?.({ err: error }) ?? (
         <ErrorMsg
-          text={error.response.data.message ?? "Something went wrong"}
+          text={error.response?.data?.message ?? "Something went wrong"}
         />
       )
     );

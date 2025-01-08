@@ -31,8 +31,9 @@ const UserProfile = () => {
       <MenuButton>
         <Avatar
           name={userName}
-          w={["28px", "40px"]}
-          h={["28px", "40px"]}
+          // w={["28px", "40px"]}
+          // h={["28px", "40px"]}
+          size={["sm", null, "md"]}
           backgroundColor={colors.secondaryColor[random(0, 7)]}
           border={`2px solid ${colors.primaryColor[0]}`}
           color={colors.primaryColor[0]}

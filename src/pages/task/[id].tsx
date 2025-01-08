@@ -1,7 +1,7 @@
 import EmptyTask from "@/components/EmptyTask";
 import ImageWithText from "@/components/ImageWithText";
 import Layout from "@/components/Layout";
-import PrimaryButton from "@/components/PrimaryButton";
+import { PrimaryButton } from "@/components/Buttons";
 import { TaskInterface } from "@/types/task";
 import { getPriorityColor, getTaskPriorityLabel } from "@/components/utils";
 import {
@@ -102,7 +102,7 @@ const TaskDetails = () => {
       <Head>
         <title>Task Details</title>
       </Head>
-      <Layout pageTitle="Task Details">
+      <Layout>
         <>
           <WithLoader
             apiUrl={queryTaskId ? `/task/${queryTaskId}` : ""}

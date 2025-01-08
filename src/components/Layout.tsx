@@ -4,16 +4,15 @@ import SideBar from "@/components/SideBar";
 import NavBar from "@/components/NavBar";
 import { colors } from "@/components/utils";
 
-const Layout = ({
-  pageTitle,
-  children,
-}: {
-  pageTitle: string;
-  children: React.ReactElement;
-}) => {
+const Layout = ({ children }: { children: React.ReactElement }) => {
   return (
-    <VStack alignItems="stretch" spacing={0} bg={colors.primaryColor[0]}>
-      <Header title={pageTitle} />
+    <VStack
+      alignItems="stretch"
+      height="inherit"
+      spacing={0}
+      bg={colors.primaryColor[0]}
+    >
+      <Header title="Smart Task Manager" />
       <SimpleGrid
         templateColumns={["minmax(0,1fr)", null, "250px minmax(0,1fr)"]}
         spacing="12px"
@@ -21,17 +20,10 @@ const Layout = ({
         w="100%"
         maxW="1600px"
         mx="auto"
+        h="inherit"
       >
         <SideBar />
-        <Box
-          w="100%"
-          maxW="1600px"
-          mx="auto"
-          pb={10}
-          overflow="auto"
-          h={["100%", null, "92vh"]}
-          p={4}
-        >
+        <Box w="100%" maxW="1600px" mx="auto" pb={10} overflow="auto" p={4}>
           {children}
         </Box>
       </SimpleGrid>
