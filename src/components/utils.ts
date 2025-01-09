@@ -82,12 +82,12 @@ export const menus: SideBarMenu[] = [
     imageUrl: "/images/home.svg",
     activeImageUrl: "/images/activeHome.svg",
   },
-  {
-    name: "Dashboard",
-    url: "/dashboard",
-    imageUrl: "/images/dashboard.svg",
-    activeImageUrl: "/images/activeDashboard.svg",
-  },
+  // {
+  //   name: "Dashboard",
+  //   url: "/dashboard",
+  //   imageUrl: "/images/dashboard.svg",
+  //   activeImageUrl: "/images/activeDashboard.svg",
+  // },
 ];
 
 export const setUserToken = (userToken?: string) => {

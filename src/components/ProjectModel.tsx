@@ -140,7 +140,6 @@ const ProjectModel = ({
                   if (!isArray(values)) {
                     return [];
                   }
-                  console.log("Searching... ", values);
                   return values.map((user) => ({
                     label: `${user.name} (${user.email})`,
                     value: user._id,
