@@ -94,7 +94,7 @@ export const setUserToken = (userToken?: string) => {
   if (!userToken) {
     return;
   }
-  Cookies.set(userTokenCookieName, userToken);
+  Cookies.set(userTokenCookieName, userToken, { expires: 30 });
 };
 
 export const getRandomPriorityEnum = (): PriorityLevelEnum => {
