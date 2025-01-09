@@ -19,6 +19,7 @@ function CustomReactAsyncSelectField<T extends FieldValues>({
   title,
   titleProps,
   placeholder,
+  isDisabled = false,
 }: {
   hForm: UseFormReturn<T>;
   name: Path<T>;
@@ -28,6 +29,7 @@ function CustomReactAsyncSelectField<T extends FieldValues>({
   title?: string;
   titleProps?: TextProps;
   placeholder?: string;
+  isDisabled?: boolean;
 }) {
   const { control } = hForm;
 
@@ -49,6 +51,7 @@ function CustomReactAsyncSelectField<T extends FieldValues>({
               titleProps={titleProps}
               placeholder={placeholder}
               showStar={rules?.required === true}
+              isDisabled={isDisabled}
             />
             <FormErrorMessage>
               {error?.message ?? error?.type === "required"

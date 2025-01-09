@@ -6,11 +6,13 @@ import { ApiSuccessResponse } from "@/types/common";
 import { UserInterface } from "@/types/user";
 
 interface ContextInterface {
+  userId: string;
   userEmail: string;
   userName: string;
 }
 
 const UserInfoContext = createContext<ContextInterface>({
+  userId: "",
   userEmail: "",
   userName: "",
 });
@@ -20,8 +22,7 @@ export const UserInfoProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [userName, setUserName] = useState<string>("");
-  const [userEmail, setUserEmail] = useState<string>("");
+  const [currentUser, setCurrentUser] = useState<UserInterface | null>(null);
   const { isLoggedIn } = useLoginCheck();
   const { makeApiCall } = useApi();
 
@@ -36,8 +37,7 @@ export const UserInfoProvider = ({
         }),
       hideMessage: true,
       onSuccess: (res) => {
-        setUserName(res.data.name);
-        setUserEmail(res.data.email);
+        setCurrentUser(res.data);
       },
     });
   }, [isLoggedIn]);
@@ -45,8 +45,9 @@ export const UserInfoProvider = ({
   return (
     <UserInfoContext.Provider
       value={{
-        userEmail,
-        userName,
+        userId: currentUser?._id ?? "",
+        userEmail: currentUser?.email ?? "",
+        userName: currentUser?.name ?? "",
       }}
     >
       {children}

@@ -11,6 +11,7 @@ const CustomReactAsyncSelect = ({
   value,
   onChange,
   showStar,
+  isDisabled = false,
 }: {
   isMultiChoice: boolean;
   getOptions: (val: string) => Promise<CustomSelectOptions[]>;
@@ -20,6 +21,7 @@ const CustomReactAsyncSelect = ({
   value?: CustomSelectOptions;
   onChange?: (val: any) => void;
   showStar?: boolean;
+  isDisabled?: boolean;
 }) => {
   return (
     <>
@@ -41,6 +43,7 @@ const CustomReactAsyncSelect = ({
         onChange={onChange}
         value={value}
         loadOptions={getOptions}
+        isDisabled={isDisabled}
       />
     </>
   );

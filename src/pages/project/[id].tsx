@@ -1,3 +1,4 @@
+import api from "@/components/api";
 import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
 import CustomModel from "@/components/CustomModal";
 import CreateTaskModel from "@/components/CustomTaskModel";
@@ -6,6 +7,8 @@ import ProjectModel from "@/components/ProjectModel";
 import TaskCard from "@/components/TaskCard";
 import { colors } from "@/components/utils";
 import WithLoader from "@/components/WithLoader";
+import { useUserInfo } from "@/context/userInfo";
+import { useApi } from "@/hook/useApi";
 import { ProjectInterface } from "@/types/project";
 import { TaskInterface, TaskStatusEnum } from "@/types/task";
 import {
@@ -25,25 +28,9 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 
 const ProjectIdPage = () => {
+  const { userId } = useUserInfo();
   const router = useRouter();
   const projectId = router.query.id;
-  const {
-    isOpen: isCreateTaskModalOpen,
-    onOpen: onCreateTaskModalOpen,
-    onClose: onCreateTaskModalClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: isDeleteProjectModalOpen,
-    onOpen: onDeleteProjectModalOpen,
-    onClose: onDeleteProjectModalClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: isEditProjectModalOpen,
-    onOpen: onEditProjectModalOpen,
-    onClose: onEditProjectModalClose,
-  } = useDisclosure();
   return (
     <Box h="100vh">
       <Head>
@@ -61,48 +48,6 @@ const ProjectIdPage = () => {
             const tasks = data.tasks;
             return (
               <VStack alignItems="stretch" spacing={4}>
-                <CreateTaskModel
-                  projectId={data._id}
-                  isOpen={isCreateTaskModalOpen}
-                  onClose={onCreateTaskModalClose}
-                />
-                <CustomModel
-                  title="Confirmation!!!!"
-                  isOpen={isDeleteProjectModalOpen}
-                  onClose={onDeleteProjectModalClose}
-                  footer={
-                    <HStack>
-                      <PrimaryButton
-                        size="md"
-                        bg="red.600"
-                        _hover={{
-                          bg: "red.300",
-                        }}
-                      >
-                        Delete
-                      </PrimaryButton>
-                    </HStack>
-                  }
-                >
-                  <Text pb="60px">
-                    Are you sure you want to delete this project?
-                  </Text>
-                </CustomModel>
-                <ProjectModel
-                  isOpen={isEditProjectModalOpen}
-                  onClose={onEditProjectModalClose}
-                  title="Edit Project"
-                  onSuccess={mutate}
-                  projectId={data._id}
-                  defaultValues={{
-                    title: data.title,
-                    description: data.description,
-                    memberIds: data.members.map((mem) => ({
-                      label: `${mem.name} (${mem.email})`,
-                      value: mem._id,
-                    })),
-                  }}
-                />
                 <HStack justifyContent="space-between">
                   <VStack alignItems="stretch">
                     <Text
@@ -120,22 +65,9 @@ const ProjectIdPage = () => {
                       {data.description}
                     </Text>
                   </VStack>
-                  <HStack>
-                    <PrimaryButton onClick={onEditProjectModalOpen}>
-                      Edit
-                    </PrimaryButton>
-                    <SecondaryButton
-                      borderColor="red.400"
-                      color="red.400"
-                      _hover={{
-                        bg: "red.50",
-                        borderColor: "red.400",
-                      }}
-                      onClick={onDeleteProjectModalOpen}
-                    >
-                      Delete
-                    </SecondaryButton>
-                  </HStack>
+                  {data.owner._id === userId && (
+                    <ProjectActions projectData={data} projectMutate={mutate} />
+                  )}
                 </HStack>
                 <HStack alignItems="center" spacing={4}>
                   <Text
@@ -151,60 +83,172 @@ const ProjectIdPage = () => {
                     ))}
                   </AvatarGroup>
                 </HStack>
-                <Text
-                  fontFamily="Noto Serif"
-                  fontSize={["16px", null, "20px"]}
-                  fontWeight={700}
-                >
-                  Tasks:
-                </Text>
-
-                {isEmpty(tasks) ? (
-                  <VStack>
-                    <Text>Please Add Task to this project</Text>
-                    <PrimaryButton size="sm" onClick={onCreateTaskModalOpen}>
-                      Add Task
-                    </PrimaryButton>
-                  </VStack>
-                ) : (
-                  <Grid
-                    templateColumns={["1fr", null, "1fr 1fr 1fr 1fr"]}
-                    gap={4}
-                  >
-                    <TaskColumn
-                      header="ToDo"
-                      tasks={tasks.filter(
-                        (task) => task.status === TaskStatusEnum.todo
-                      )}
-                      showCreateTask
-                      onCreateTask={onCreateTaskModalOpen}
-                    />
-                    <TaskColumn
-                      header="In Progress"
-                      tasks={tasks.filter(
-                        (task) => task.status === TaskStatusEnum.inProcess
-                      )}
-                    />
-                    <TaskColumn
-                      header="Completed"
-                      tasks={tasks.filter(
-                        (task) => task.status === TaskStatusEnum.completed
-                      )}
-                    />
-                    <TaskColumn
-                      header="Blocked"
-                      tasks={tasks.filter(
-                        (task) => task.status === TaskStatusEnum.blocked
-                      )}
-                    />
-                  </Grid>
-                )}
+                <TaskList projectId={String(projectId)} tasks={tasks} />
               </VStack>
             );
           }}
         </WithLoader>
       </Layout>
     </Box>
+  );
+};
+
+const ProjectActions = ({
+  projectData,
+  projectMutate,
+}: {
+  projectData: ProjectInterface;
+  projectMutate: () => void;
+}) => {
+  const router = useRouter();
+  const { makeApiCall } = useApi();
+  const {
+    isOpen: isDeleteProjectModalOpen,
+    onOpen: onDeleteProjectModalOpen,
+    onClose: onDeleteProjectModalClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isEditProjectModalOpen,
+    onOpen: onEditProjectModalOpen,
+    onClose: onEditProjectModalClose,
+  } = useDisclosure();
+
+  const handleDeleteProject = () => {
+    makeApiCall({
+      apiFn: () =>
+        api(`/project/delete/${projectData._id}`, {
+          method: "DELETE",
+        }),
+      successMsg: {
+        title: "Project deleted successfully",
+      },
+      onSuccess: (res) => {
+        router.replace("/");
+        onDeleteProjectModalClose();
+      },
+    });
+  };
+
+  return (
+    <HStack>
+      <CustomModel
+        title="Confirmation!!!!"
+        isOpen={isDeleteProjectModalOpen}
+        onClose={onDeleteProjectModalClose}
+        footer={
+          <HStack>
+            <PrimaryButton
+              size="md"
+              bg="red.600"
+              _hover={{
+                bg: "red.300",
+              }}
+              onClick={handleDeleteProject}
+            >
+              Delete
+            </PrimaryButton>
+          </HStack>
+        }
+      >
+        <Text pb="60px">Are you sure you want to delete this project?</Text>
+      </CustomModel>
+      <ProjectModel
+        isOpen={isEditProjectModalOpen}
+        onClose={onEditProjectModalClose}
+        title="Edit Project"
+        onSuccess={projectMutate}
+        projectId={projectData._id}
+        defaultValues={{
+          title: projectData.title,
+          description: projectData.description,
+          memberIds: projectData.members
+            .filter((mem) => projectData.owner._id !== mem._id)
+            .map((mem) => ({
+              label: `${mem.name} (${mem.email})`,
+              value: mem._id,
+            })),
+        }}
+      />
+      <PrimaryButton onClick={onEditProjectModalOpen}>Edit</PrimaryButton>
+      <SecondaryButton
+        borderColor="red.400"
+        color="red.400"
+        _hover={{
+          bg: "red.50",
+          borderColor: "red.400",
+        }}
+        onClick={onDeleteProjectModalOpen}
+      >
+        Delete
+      </SecondaryButton>
+    </HStack>
+  );
+};
+
+const TaskList = ({
+  projectId,
+  tasks,
+}: {
+  projectId: string;
+  tasks: TaskInterface[];
+}) => {
+  const {
+    isOpen: isCreateTaskModalOpen,
+    onOpen: onCreateTaskModalOpen,
+    onClose: onCreateTaskModalClose,
+  } = useDisclosure();
+  return (
+    <>
+      <CreateTaskModel
+        projectId={projectId}
+        isOpen={isCreateTaskModalOpen}
+        onClose={onCreateTaskModalClose}
+      />
+      <Text
+        fontFamily="Noto Serif"
+        fontSize={["16px", null, "20px"]}
+        fontWeight={700}
+      >
+        Tasks:
+      </Text>
+
+      {isEmpty(tasks) ? (
+        <VStack>
+          <Text>Please Add Task to this project</Text>
+          <PrimaryButton size="sm" onClick={onCreateTaskModalOpen}>
+            Add Task
+          </PrimaryButton>
+        </VStack>
+      ) : (
+        <Grid templateColumns={["1fr", null, "1fr 1fr 1fr 1fr"]} gap={4}>
+          <TaskColumn
+            header="ToDo"
+            tasks={tasks.filter((task) => task.status === TaskStatusEnum.todo)}
+            showCreateTask
+            onCreateTask={onCreateTaskModalOpen}
+          />
+          <TaskColumn
+            header="In Progress"
+            tasks={tasks.filter(
+              (task) => task.status === TaskStatusEnum.inProcess
+            )}
+          />
+          <TaskColumn
+            header="Completed"
+            tasks={tasks.filter(
+              (task) => task.status === TaskStatusEnum.completed
+            )}
+          />
+          <TaskColumn
+            header="Blocked"
+            tasks={tasks.filter(
+              (task) => task.status === TaskStatusEnum.blocked
+            )}
+          />
+        </Grid>
+      )}
+    </>
   );
 };
 

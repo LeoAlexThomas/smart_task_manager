@@ -50,6 +50,7 @@ export function useApi() {
       }
       showToast({
         title: "Something went wrong",
+        description: (e as any)?.response?.data?.message,
         status: ToastStatusEnum.error,
       });
     }
