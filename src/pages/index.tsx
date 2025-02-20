@@ -7,7 +7,7 @@ import WithLoader from "@/components/WithLoader";
 import { ProjectInterface } from "@/types/project";
 import EmptyProject from "@/components/project/EmptyProject";
 import ProjectList from "@/components/project/ProjectList";
-import ProjectModel from "@/components/ProjectModel";
+import ProjectModel from "@/components/project/ProjectModel";
 
 const HomePage = () => {
   const {

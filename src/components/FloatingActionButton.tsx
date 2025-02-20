@@ -1,5 +1,4 @@
 import { Box, IconButton, useBreakpointValue } from "@chakra-ui/react";
-import Link from "next/link";
 import { AddCircle } from "@emotion-icons/fluentui-system-regular/AddCircle";
 
 const FloatingActionButton = ({ onClick }: { onClick: () => void }) => {
@@ -8,7 +7,7 @@ const FloatingActionButton = ({ onClick }: { onClick: () => void }) => {
   return (
     <Box
       position="fixed"
-      bottom={["90px", null, "20px"]}
+      bottom="20px"
       right={["20px", null, null, null, null, "150px"]}
     >
       <IconButton

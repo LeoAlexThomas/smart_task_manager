@@ -1,7 +1,8 @@
 import random from "lodash/random";
-import { PriorityLevelEnum } from "@/types/task";
+import { PriorityLevelEnum, TaskStatusEnum } from "@/types/task";
 import { SideBarMenu } from "@/types/common";
 import Cookies from "js-cookie";
+import { mutate } from "swr";
 
 export const colors = {
   primaryColor: [
@@ -120,6 +121,19 @@ export const getTaskPriorityLabel = (priority: PriorityLevelEnum): string => {
   }
 };
 
+export const getTaskStatusLabel = (priority: TaskStatusEnum): string => {
+  switch (priority) {
+    case TaskStatusEnum.initial:
+      return "Initial";
+    case TaskStatusEnum.inProcess:
+      return "In Progress";
+    case TaskStatusEnum.completed:
+      return "Completed";
+    default:
+      return "Blocked";
+  }
+};
+
 export const getPriorityColor = (priority: PriorityLevelEnum): string => {
   switch (priority) {
     case PriorityLevelEnum.low:
@@ -131,6 +145,29 @@ export const getPriorityColor = (priority: PriorityLevelEnum): string => {
   }
 };
 
+export const getStatusColor = (status: TaskStatusEnum): string => {
+  switch (status) {
+    case TaskStatusEnum.initial:
+      return "#44bb44BB";
+    case TaskStatusEnum.blocked:
+      return "#ff5b5bBB";
+    case TaskStatusEnum.completed:
+      return "#4e4ebbBB";
+    default:
+      return "#ff5baaBB";
+  }
+};
+
 export const logout = () => {
   Cookies.remove(userTokenCookieName);
+};
+
+export const mutateAllTaskStatusApiCall = ({
+  projectId,
+}: {
+  projectId: string;
+}) => {
+  Object.values(TaskStatusEnum).map((status) =>
+    mutate(`/task/status/${status}/?projectId=${projectId}`)
+  );
 };

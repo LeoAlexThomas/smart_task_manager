@@ -18,7 +18,7 @@ const ImageWithText = ({
   textProps?: TextProps;
 }) => {
   return (
-    <SimpleGrid templateColumns={"20px 1fr"} alignItems="center" spacing={3}>
+    <SimpleGrid templateColumns={"20px 1fr"} alignItems="center" spacing={2}>
       <Image src={imageSrc} alt="" w="20px" h="20px" {...imageProps} />
       <Text
         fontSize={["12px", null, "16px"]}

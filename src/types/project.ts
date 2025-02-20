@@ -9,6 +9,7 @@ export interface ProjectInterface {
   members: UserInterface[];
   tasks: TaskInterface[];
   owner: UserInterface;
+  highlightText: string | null;
 }
 
 export interface CreateProjectInterface {

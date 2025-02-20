@@ -7,34 +7,44 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import TaskForm from "@/components/TaskForm";
+import TaskForm from "@/components/task/TaskForm";
 import { createTaskFormId } from "@/components/utils";
 import { Save } from "@emotion-icons/fa-regular/Save";
-import { CreateTaskInterface } from "@/types/task";
+import { CreateTaskInterface, TaskStatusEnum } from "@/types/task";
 import dayjs from "dayjs";
 import { useApi } from "@/hook/useApi";
-import api from "./api";
+import api from "../api";
 import { PrimaryButton } from "@/components/Buttons";
+import isNil from "lodash/isNil";
 
-const defaultTaskValues: CreateTaskInterface = {
+const defaultValues: CreateTaskInterface = {
   title: "",
   description: "",
   endDate: "",
-  location: "",
   priorityLevel: "",
   projectId: "",
+  status: TaskStatusEnum.initial,
 };
 
-const CreateTaskModel = ({
+const CustomTaskModel = ({
   isOpen,
   onClose,
   projectId,
+  taskId,
+  initialTaskStatus = TaskStatusEnum.initial,
+  onTaskCreated,
+  defaultTaskValues,
 }: {
   isOpen: boolean;
   onClose: () => void;
   projectId: string;
+  taskId?: string;
+  initialTaskStatus?: TaskStatusEnum;
+  onTaskCreated: () => void;
+  defaultTaskValues?: CreateTaskInterface;
 }) => {
   const { makeApiCall } = useApi();
+  const isEditAction = !isNil(defaultTaskValues);
 
   const handleSubmit = (values: CreateTaskInterface) => {
     const requestObj: CreateTaskInterface = {
@@ -42,28 +52,47 @@ const CreateTaskModel = ({
       endDate: dayjs(values.endDate).toISOString(),
     };
     makeApiCall({
-      apiFn: () =>
-        api("/task/create/", {
-          method: "POST",
-          data: requestObj,
-        }),
+      apiFn: isEditAction
+        ? () =>
+            api(isNil(taskId) ? "" : `/task/update/${taskId}`, {
+              method: "PUT",
+              data: requestObj,
+            })
+        : () =>
+            api("/task/create/", {
+              method: "POST",
+              data: requestObj,
+            }),
       onSuccess: () => {
+        onTaskCreated();
         onClose();
       },
     });
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Add Task</ModalHeader>
+        <ModalHeader>{isEditAction ? "Edit Task" : "Add Task"}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <TaskForm
             formId={createTaskFormId}
             onSubmit={handleSubmit}
-            defaultValues={{ ...defaultTaskValues, projectId: projectId }}
+            defaultValues={
+              isNil(defaultTaskValues)
+                ? {
+                    ...defaultValues,
+                    status: initialTaskStatus,
+                    projectId: projectId,
+                  }
+                : {
+                    ...defaultTaskValues,
+                    status: initialTaskStatus,
+                    projectId: projectId,
+                  }
+            }
           />
         </ModalBody>
         <ModalFooter>
@@ -90,4 +119,4 @@ const CreateTaskModel = ({
   );
 };
 
-export default CreateTaskModel;
+export default CustomTaskModel;

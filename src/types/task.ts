@@ -5,7 +5,7 @@ export enum PriorityLevelEnum {
 }
 
 export enum TaskStatusEnum {
-  todo = "todo",
+  initial = "initial",
   inProcess = "inProcess",
   completed = "completed",
   blocked = "blocked",
@@ -18,11 +18,11 @@ export interface TaskInterface {
   createdAt: string;
   endDate: string;
   priorityLevel: PriorityLevelEnum;
-  location: string;
   isCompleted: boolean;
   projectId: string;
   completedDate: string | null;
   status: TaskStatusEnum;
+  highlightText: string | null;
 }
 
 export interface CustomSelectModel {
@@ -35,6 +35,6 @@ export interface CreateTaskInterface {
   description: string;
   endDate: string; // ISO string
   priorityLevel: PriorityLevelEnum | ""; // "" is for default value in form value
-  location: string;
   projectId: string;
+  status: TaskStatusEnum;
 }

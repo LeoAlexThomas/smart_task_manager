@@ -1,4 +1,4 @@
-import EmptyTask from "@/components/EmptyTask";
+import EmptyTask from "@/components/task/EmptyTask";
 import ImageWithText from "@/components/ImageWithText";
 import Layout from "@/components/Layout";
 import { PrimaryButton } from "@/components/Buttons";
@@ -174,10 +174,6 @@ const TaskDetails = () => {
                     <ImageWithText
                       imageSrc="/images/calendar.svg"
                       text={dayjs(task.endDate).format("DD MMM YYYY")}
-                    />
-                    <ImageWithText
-                      imageSrc="/images/locationGif.gif"
-                      text={task.location}
                     />
                     <Stack
                       direction={["column", "row"]}

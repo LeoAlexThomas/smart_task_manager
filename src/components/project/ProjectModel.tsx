@@ -1,18 +1,18 @@
 import { CreateProjectInterface } from "@/types/project";
 import { HStack, VStack } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import InputField from "./form/InputField";
-import { colors, createProjectFormId } from "./utils";
-import CustomReactAsyncSelectField from "./form/CustomReactAsyncSelectField";
-import api from "./api";
+import InputField from "../form/InputField";
+import { colors, createProjectFormId } from "../utils";
+import CustomReactAsyncSelectField from "../form/CustomReactAsyncSelectField";
+import api from "../api";
 import { UserInterface } from "@/types/user";
 import { useApi } from "@/hook/useApi";
 import { ApiSuccessResponse } from "@/types/common";
 import isArray from "lodash/isArray";
-import CustomModel from "./CustomModal";
+import CustomModel from "../CustomModal";
 import { useEffect } from "react";
 import isNil from "lodash/isNil";
-import { PrimaryButton, SecondaryButton } from "./Buttons";
+import { PrimaryButton, SecondaryButton } from "../Buttons";
 
 const ProjectModel = ({
   isOpen,

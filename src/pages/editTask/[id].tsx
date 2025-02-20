@@ -3,7 +3,7 @@ import { CreateTaskInterface, TaskInterface } from "@/types/task";
 import dayjs from "dayjs";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import TaskForm from "@/components/TaskForm";
+import TaskForm from "@/components/task/TaskForm";
 import { useApi } from "@/hook/useApi";
 import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
 import WithLoader from "@/components/WithLoader";
@@ -53,18 +53,19 @@ const EditTask = () => {
       <Head>
         <title>Edit Task</title>
       </Head>
-      <Layout pageTitle="Edit Task">
+      <Layout>
         <WithLoader apiUrl={queryTaskId ? `/task/${queryTaskId}` : ""}>
           {({ data }: { data: TaskInterface }) => {
             return (
               <TaskForm
                 formId={editTaskFormId}
                 defaultValues={{
+                  projectId: data.projectId,
                   title: data.title,
                   description: data.description,
                   endDate: dayjs(data.endDate).format("YYYY-MM-DD"),
-                  location: data.location,
                   priorityLevel: data.priorityLevel,
+                  status: data.status,
                 }}
                 onSubmit={(val) => onSubmit(val, data._id)}
               />
