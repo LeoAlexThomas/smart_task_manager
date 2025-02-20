@@ -1,5 +1,5 @@
 import { usePageLoader } from "@/context/pageLoaderContext";
-import useCustomToast, { ToastStatusEnum } from "./useCustomToast";
+import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
 
 export function useApi() {
   const { onOpen: showPageLoader, onClose: hidePageLoader } = usePageLoader();
@@ -50,6 +50,7 @@ export function useApi() {
       }
       showToast({
         title: "Something went wrong",
+        description: (e as any)?.response?.data?.message,
         status: ToastStatusEnum.error,
       });
     }

@@ -1,6 +1,6 @@
 import { getApiUrl } from "@/env";
 import { parseCookies } from "nookies";
-import { userTokenCookieName } from "./utils";
+import { userTokenCookieName } from "@/components/utils";
 const axios = require("axios");
 
 export const getAccessToken = (options: any) => {

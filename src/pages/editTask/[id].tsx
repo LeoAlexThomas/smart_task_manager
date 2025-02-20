@@ -1,16 +1,15 @@
 import Layout from "@/components/Layout";
-import { CreateTaskInterface, TaskInterface } from "@/components/types/task";
+import { CreateTaskInterface, TaskInterface } from "@/types/task";
 import dayjs from "dayjs";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import TaskForm from "@/components/TaskForm";
-import { useApi } from "@/components/hook/useApi";
-import useCustomToast, {
-  ToastStatusEnum,
-} from "@/components/hook/useCustomToast";
+import TaskForm from "@/components/task/TaskForm";
+import { useApi } from "@/hook/useApi";
+import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
 import WithLoader from "@/components/WithLoader";
 import api from "@/components/api";
-import { ApiSuccessResponse } from "@/components/types/common";
+import { ApiSuccessResponse } from "@/types/common";
+import { editTaskFormId } from "@/components/utils";
 
 const EditTask = () => {
   const router = useRouter();
@@ -22,11 +21,11 @@ const EditTask = () => {
   const onSubmit = (values: CreateTaskInterface, taskId: string) => {
     makeApiCall<ApiSuccessResponse<{}>>({
       apiFn: () =>
-        api(`/updateTask/${taskId}`, {
+        api(`/task/update/${taskId}`, {
           method: "PUT",
           data: values,
         }),
-      onSuccess: (res) => {
+      onSuccess: (res: ApiSuccessResponse<{}>) => {
         if (res.isSuccess) {
           showToast({
             title: res.message,
@@ -42,7 +41,7 @@ const EditTask = () => {
       },
       onFailure: (err: any) => {
         showToast({
-          title: err.message ?? "Something went wrong",
+          title: err?.response?.data?.message ?? "Something went wrong",
           status: ToastStatusEnum.error,
         });
       },
@@ -54,17 +53,19 @@ const EditTask = () => {
       <Head>
         <title>Edit Task</title>
       </Head>
-      <Layout pageTitle="Edit Task">
-        <WithLoader apiUrl={queryTaskId ? `/getTask/${queryTaskId}` : ""}>
+      <Layout>
+        <WithLoader apiUrl={queryTaskId ? `/task/${queryTaskId}` : ""}>
           {({ data }: { data: TaskInterface }) => {
             return (
               <TaskForm
+                formId={editTaskFormId}
                 defaultValues={{
+                  projectId: data.projectId,
                   title: data.title,
                   description: data.description,
                   endDate: dayjs(data.endDate).format("YYYY-MM-DD"),
-                  location: data.location,
                   priorityLevel: data.priorityLevel,
+                  status: data.status,
                 }}
                 onSubmit={(val) => onSubmit(val, data._id)}
               />

@@ -1,20 +1,22 @@
 import Layout from "@/components/Layout";
-import { CreateTaskInterface } from "@/types/task";
+import { CreateTaskInterface, TaskStatusEnum } from "@/types/task";
 import { isArray, isNil } from "lodash";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import TaskForm from "@/components/TaskForm";
+import TaskForm from "@/components/task/TaskForm";
 import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
 import { useApi } from "@/hook/useApi";
 import api from "@/components/api";
+import { createTaskFormId } from "@/components/utils";
 
 const defaultTaskValues: CreateTaskInterface = {
+  projectId: "",
   title: "",
   description: "",
   endDate: "",
-  location: "",
   priorityLevel: "",
+  status: TaskStatusEnum.initial,
 };
 
 const CreateTask = () => {
@@ -38,7 +40,7 @@ const CreateTask = () => {
   const onSubmit = async (values: CreateTaskInterface) => {
     makeApiCall({
       apiFn: () =>
-        api("/createTask", {
+        api("/task/create", {
           method: "POST",
           data: { ...values, isCompleted: false },
         }),
@@ -58,7 +60,7 @@ const CreateTask = () => {
       },
       onFailure: (err: any) => {
         showToast({
-          title: err.message ?? "Something went wrong",
+          title: err?.response?.data?.message ?? "Something went wrong",
           status: ToastStatusEnum.error,
         });
       },
@@ -70,8 +72,9 @@ const CreateTask = () => {
       <Head>
         <title>Create Task</title>
       </Head>
-      <Layout pageTitle="Add Task">
+      <Layout>
         <TaskForm
+          formId={createTaskFormId}
           defaultValues={{ ...defaultTaskValues, title: title ?? "" }}
           onSubmit={onSubmit}
         />

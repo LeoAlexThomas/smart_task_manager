@@ -1,13 +1,14 @@
 export interface CreateUserInterface {
-  userName: string;
-  userEmail: string;
+  name: string;
+  email: string;
   password: string;
   confirmPassword: string;
 }
 
 export interface UserInterface {
-  userName: string;
-  userEmail: string;
+  _id: string;
+  name: string;
+  email: string;
 }
 
 export interface SignInUserInterface {

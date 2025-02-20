@@ -5,7 +5,7 @@ import {
   PopoverContent,
 } from "@chakra-ui/react";
 import { Search } from "@emotion-icons/boxicons-regular/Search";
-import SearchTextInput from "./SearchTextInput";
+import SearchTextInput from "@/components/SearchTextInput";
 
 const SearchMenuPopup = ({
   searchText,

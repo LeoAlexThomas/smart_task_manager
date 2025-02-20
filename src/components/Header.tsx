@@ -1,15 +1,10 @@
 import { Box, HStack, IconButton, SimpleGrid, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { ArrowIosBack } from "@emotion-icons/evaicons-solid/ArrowIosBack";
-import UserProfile from "./UserProfile";
+import UserProfile from "@/components/UserProfile";
+import { colors } from "@/components/utils";
 
-const Header = ({
-  title,
-  actions,
-}: {
-  title: string;
-  actions?: React.ReactNode;
-}) => {
+const Header = ({ title }: { title: string }) => {
   const router = useRouter();
   const showBack = router.asPath !== "/";
   const handleBack = () => {
@@ -22,7 +17,7 @@ const Header = ({
       boxShadow="0px 0px 5px 2px #00000020"
       pos="sticky"
       top={0}
-      bg="white"
+      bg={colors.secondaryColor[1]}
       zIndex={99}
     >
       <HStack maxW="1600px" mx="auto" justifyContent="space-between" p={4}>
@@ -38,7 +33,7 @@ const Header = ({
           {showBack && (
             <IconButton
               aria-label="back"
-              icon={<ArrowIosBack size="25px" />}
+              icon={<ArrowIosBack color={colors.primaryColor[0]} size="25px" />}
               onClick={handleBack}
               bgColor="transparent"
               _hover={{}}
@@ -49,13 +44,12 @@ const Header = ({
             fontSize={["20px", null, "24px"]}
             fontWeight={500}
             lineHeight="1.2"
+            color={colors.primaryColor[0]}
           >
             {title}
           </Text>
         </SimpleGrid>
-        <HStack>
-          {actions} <UserProfile />
-        </HStack>
+        <UserProfile />
       </HStack>
     </Box>
   );

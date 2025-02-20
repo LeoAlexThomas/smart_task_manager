@@ -1,7 +1,7 @@
 import { Center, VStack, Box, Tabs, TabList, Tab } from "@chakra-ui/react";
 import { useState } from "react";
-import UserSignUpForm from "./UserSignUpForm";
-import UserSignInForm from "./UserSignInForm";
+import UserSignUpForm from "@/components/userAuth/UserSignUpForm";
+import UserSignInForm from "@/components/userAuth/UserSignInForm";
 
 const UserAuthenticationTabs = () => {
   const [selectedTab, setSelectedTab] = useState<number>(0);

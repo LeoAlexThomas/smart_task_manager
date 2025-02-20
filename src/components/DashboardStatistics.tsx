@@ -24,8 +24,8 @@ import { Doughnut } from "react-chartjs-2";
 import dayjs from "dayjs";
 import isEmpty from "lodash/isEmpty";
 import { TaskInterface } from "@/types/task";
-import EmptyTask from "./EmptyTask";
-import WithLoader from "./WithLoader";
+import EmptyTask from "@/components/task/EmptyTask";
+import WithLoader from "@/components/WithLoader";
 
 ChartJS.register(
   ArcElement,
@@ -39,7 +39,7 @@ ChartJS.register(
 
 const DashboardStatistics = () => {
   return (
-    <WithLoader apiUrl="/getTasks">
+    <WithLoader apiUrl="/task/all">
       {({ data: tasks }: { data: TaskInterface[] }) => {
         if (isEmpty(tasks)) {
           return <EmptyTask showAddLink h="50vh" />;

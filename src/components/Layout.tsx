@@ -1,42 +1,31 @@
 import { SimpleGrid, VStack, Box } from "@chakra-ui/react";
-import Header from "./Header";
-import SideBar from "./SideBar";
-import NavBar from "./NavBar";
+import Header from "@/components/Header";
+import { colors } from "@/components/utils";
 
-const Layout = ({
-  pageTitle,
-  headerActions,
-  children,
-}: {
-  pageTitle: string;
-  headerActions?: React.ReactNode;
-  children: React.ReactElement;
-}) => {
+const Layout = ({ children }: { children: React.ReactElement }) => {
   return (
-    <VStack alignItems="stretch" spacing={0}>
-      <Header title={pageTitle} actions={headerActions} />
+    <VStack
+      alignItems="stretch"
+      height="inherit"
+      spacing={0}
+      bg={colors.primaryColor[0]}
+      h="100vh"
+      overflowY="auto"
+    >
+      <Header title="Smart Task Manager" />
       <SimpleGrid
-        templateColumns={["minmax(0,1fr)", null, "250px minmax(0,1fr)"]}
+        templateColumns="minmax(0,1fr)"
         spacing="12px"
         pb={["80px", null, 0]}
         w="100%"
         maxW="1600px"
         mx="auto"
+        h="inherit"
       >
-        <SideBar />
-        <Box
-          w="100%"
-          maxW="1600px"
-          mx="auto"
-          pb={10}
-          overflow="auto"
-          h={["100%", null, "92vh"]}
-          p={4}
-        >
+        <Box w="100%" maxW="1600px" mx="auto" pb={10} p={4}>
           {children}
         </Box>
       </SimpleGrid>
-      <NavBar />
     </VStack>
   );
 };

@@ -1,8 +1,8 @@
-import EmptyTask from "@/components/EmptyTask";
+import EmptyTask from "@/components/task/EmptyTask";
 import ImageWithText from "@/components/ImageWithText";
 import Layout from "@/components/Layout";
-import PrimaryButton from "@/components/PrimaryButton";
-import { TaskInterface } from "@/components/types/task";
+import { PrimaryButton } from "@/components/Buttons";
+import { TaskInterface } from "@/types/task";
 import { getPriorityColor, getTaskPriorityLabel } from "@/components/utils";
 import {
   VStack,
@@ -12,22 +12,18 @@ import {
   Switch,
   useBreakpointValue,
   Stack,
-  useDisclosure,
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Edit } from "@emotion-icons/boxicons-solid/Edit";
-import { DeleteOutline } from "@emotion-icons/material/DeleteOutline";
+// import { DeleteOutline } from "@emotion-icons/material/DeleteOutline";
 import Link from "next/link";
-import DeleteButton from "@/components/DeleteButton";
-import WarningModal from "@/components/WarningModal";
-import { ApiSuccessResponse, ErrorResponse } from "@/components/types/common";
+// import WarningModal from "@/components/WarningModal";
+import { ErrorResponse } from "@/types/common";
 import ErrorMsg from "@/components/ErrorMsg";
-import useCustomToast, {
-  ToastStatusEnum,
-} from "@/components/hook/useCustomToast";
-import { useApi } from "@/components/hook/useApi";
+import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
+import { useApi } from "@/hook/useApi";
 import WithLoader from "@/components/WithLoader";
 import api from "@/components/api";
 import { KeyedMutator } from "swr";
@@ -38,31 +34,31 @@ const TaskDetails = () => {
   const { showToast } = useCustomToast();
   const { makeApiCall } = useApi();
   const isTablet = useBreakpointValue({ base: true, md: false });
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  // const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const handleDelete = (taskId: string) => {
-    makeApiCall<ApiSuccessResponse<{}>>({
-      apiFn: () =>
-        api(`/deleteTask/${taskId}`, {
-          method: "DELETE",
-        }),
-      onSuccess: (res: any) => {
-        onClose();
-        router.replace("/");
-        showToast({
-          title: res.message,
-          status: ToastStatusEnum.success,
-        });
-      },
-      onFailure: (err: any) => {
-        onClose();
-        showToast({
-          title: err.message ?? "Something went wrong",
-          status: ToastStatusEnum.error,
-        });
-      },
-    });
-  };
+  // const handleDelete = (taskId: string) => {
+  //   makeApiCall<ApiSuccessResponse<{}>>({
+  //     apiFn: () =>
+  //       api(`/task/delete/${taskId}`, {
+  //         method: "DELETE",
+  //       }),
+  //     onSuccess: (res: any) => {
+  //       onClose();
+  //       router.replace("/");
+  //       showToast({
+  //         title: res.message,
+  //         status: ToastStatusEnum.success,
+  //       });
+  //     },
+  //     onFailure: (err: any) => {
+  //       onClose();
+  //       showToast({
+  //         title: err?.response?.data?.message ?? "Something went wrong",
+  //         status: ToastStatusEnum.error,
+  //       });
+  //     },
+  //   });
+  // };
 
   const handleUpdate = (
     updatableTask: TaskInterface,
@@ -77,7 +73,7 @@ const TaskDetails = () => {
     mutate(requestObj, { revalidate: false });
     makeApiCall({
       apiFn: () =>
-        api(`/updateTask/${updatableTask._id}`, {
+        api(`/task/update/${updatableTask._id}`, {
           method: "PUT",
           data: requestObj,
         }),
@@ -92,7 +88,7 @@ const TaskDetails = () => {
       onFailure: (err: any) => {
         mutate();
         showToast({
-          title: err.message ?? "Something went wrong",
+          title: err?.response?.data?.message ?? "Something went wrong",
           status: ToastStatusEnum.error,
         });
       },
@@ -104,10 +100,10 @@ const TaskDetails = () => {
       <Head>
         <title>Task Details</title>
       </Head>
-      <Layout pageTitle="Task Details">
+      <Layout>
         <>
           <WithLoader
-            apiUrl={queryTaskId ? `/getTask/${queryTaskId}` : ""}
+            apiUrl={queryTaskId ? `/task/${queryTaskId}` : ""}
             customError={({ err }: { err: ErrorResponse }) => {
               if (err.message === "Task not found") {
                 return <EmptyTask />;
@@ -124,14 +120,14 @@ const TaskDetails = () => {
             }) => {
               return (
                 <>
-                  <WarningModal
+                  {/* <WarningModal
                     isOpen={isOpen}
                     onClose={onClose}
                     onYes={() => handleDelete(task._id)}
                     message={`Are you sure to delete ${
                       task?.title ?? "this task"
                     }?`}
-                  />
+                  /> */}
                   <VStack alignItems="stretch" spacing={[6, null, 10]}>
                     <HStack
                       alignItems={["flex-start", null, "center"]}
@@ -177,10 +173,6 @@ const TaskDetails = () => {
                       imageSrc="/images/calendar.svg"
                       text={dayjs(task.endDate).format("DD MMM YYYY")}
                     />
-                    <ImageWithText
-                      imageSrc="/images/locationGif.gif"
-                      text={task.location}
-                    />
                     <Stack
                       direction={["column", "row"]}
                       alignSelf={["stretch", "flex-end"]}
@@ -205,7 +197,7 @@ const TaskDetails = () => {
                           Edit
                         </PrimaryButton>
                       </Link>
-                      <DeleteButton
+                      {/* <DeleteButton
                         leftIcon={
                           <DeleteOutline
                             size={isTablet ? "20px" : "25px"}
@@ -217,7 +209,7 @@ const TaskDetails = () => {
                         onClick={onOpen}
                       >
                         Delete
-                      </DeleteButton>
+                      </DeleteButton> */}
                     </Stack>
                   </VStack>
                 </>

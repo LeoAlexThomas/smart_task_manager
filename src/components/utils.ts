@@ -1,7 +1,37 @@
 import random from "lodash/random";
-import { PriorityLevelEnum } from "@/types/task";
+import { PriorityLevelEnum, TaskStatusEnum } from "@/types/task";
 import { SideBarMenu } from "@/types/common";
 import Cookies from "js-cookie";
+import { mutate } from "swr";
+
+export const colors = {
+  primaryColor: [
+    "#f5f5f5",
+    "#dcdcdc",
+    "#d3d3d3",
+    "#c0c0c0",
+    "#b0b0b0",
+    "#a9a9a9",
+    "#696969",
+    "#505050",
+    "#383838",
+  ],
+  secondaryColor: [
+    "#85a5c2",
+    "#7196b8",
+    "#5d87ae",
+    "#4978a4",
+    "#356a9a",
+    "#2f5f8a",
+    "#2a547b",
+    "#254a6b",
+    "#1f3f5c",
+  ],
+};
+
+export const createTaskFormId = "createTaskFormId";
+export const editTaskFormId = "editTaskFormId";
+export const createProjectFormId = "createProjectFormId";
 
 export const userTokenCookieName = "userToken";
 
@@ -53,19 +83,19 @@ export const menus: SideBarMenu[] = [
     imageUrl: "/images/home.svg",
     activeImageUrl: "/images/activeHome.svg",
   },
-  {
-    name: "Dashboard",
-    url: "/dashboard",
-    imageUrl: "/images/dashboard.svg",
-    activeImageUrl: "/images/activeDashboard.svg",
-  },
+  // {
+  //   name: "Dashboard",
+  //   url: "/dashboard",
+  //   imageUrl: "/images/dashboard.svg",
+  //   activeImageUrl: "/images/activeDashboard.svg",
+  // },
 ];
 
 export const setUserToken = (userToken?: string) => {
   if (!userToken) {
     return;
   }
-  Cookies.set(userTokenCookieName, userToken);
+  Cookies.set(userTokenCookieName, userToken, { expires: 30 });
 };
 
 export const getRandomPriorityEnum = (): PriorityLevelEnum => {
@@ -91,6 +121,19 @@ export const getTaskPriorityLabel = (priority: PriorityLevelEnum): string => {
   }
 };
 
+export const getTaskStatusLabel = (priority: TaskStatusEnum): string => {
+  switch (priority) {
+    case TaskStatusEnum.initial:
+      return "Initial";
+    case TaskStatusEnum.inProcess:
+      return "In Progress";
+    case TaskStatusEnum.completed:
+      return "Completed";
+    default:
+      return "Blocked";
+  }
+};
+
 export const getPriorityColor = (priority: PriorityLevelEnum): string => {
   switch (priority) {
     case PriorityLevelEnum.low:
@@ -102,6 +145,29 @@ export const getPriorityColor = (priority: PriorityLevelEnum): string => {
   }
 };
 
+export const getStatusColor = (status: TaskStatusEnum): string => {
+  switch (status) {
+    case TaskStatusEnum.initial:
+      return "#44bb44BB";
+    case TaskStatusEnum.blocked:
+      return "#ff5b5bBB";
+    case TaskStatusEnum.completed:
+      return "#4e4ebbBB";
+    default:
+      return "#ff5baaBB";
+  }
+};
+
 export const logout = () => {
   Cookies.remove(userTokenCookieName);
+};
+
+export const mutateAllTaskStatusApiCall = ({
+  projectId,
+}: {
+  projectId: string;
+}) => {
+  Object.values(TaskStatusEnum).map((status) =>
+    mutate(`/task/status/${status}/?projectId=${projectId}`)
+  );
 };

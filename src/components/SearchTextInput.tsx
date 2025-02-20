@@ -13,7 +13,7 @@ const SearchTextInput = ({
       value={searchText}
       onChange={(e) => onSearchTextChange(e.target.value)}
       maxW={["auto", null, "350px"]}
-      placeholder="Search Task"
+      placeholder="Search Projects"
       fontSize={["12px", null, "16px"]}
       {...props}
     />

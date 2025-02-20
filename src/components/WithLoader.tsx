@@ -1,6 +1,6 @@
-import ErrorMsg from "./ErrorMsg";
-import Loader from "./Loader";
-import { ErrorResponse } from "./types/common";
+import { ErrorResponse } from "@/types/common";
+import ErrorMsg from "@/components/ErrorMsg";
+import Loader from "@/components/Loader";
 import useSWR, { KeyedMutator } from "swr";
 
 function WithLoader<T>({
@@ -25,7 +25,13 @@ function WithLoader<T>({
   const isLoading = !data && !error;
 
   if (error) {
-    return customError?.({ err: error }) ?? <ErrorMsg text={error.message} />;
+    return (
+      customError?.({ err: error }) ?? (
+        <ErrorMsg
+          text={error.response?.data?.message ?? "Something went wrong"}
+        />
+      )
+    );
   }
 
   if (isLoading) {

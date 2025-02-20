@@ -5,7 +5,7 @@ const getEnvConfig = () => {
     case "dev":
       return {
         env: "dev",
-        apiUrl: "http://localhost:3001/.netlify/functions/api",
+        apiUrl: "http://localhost:3002/.netlify/functions/api",
         websiteUrl: "http://localhost:3000",
       };
     case "stage":

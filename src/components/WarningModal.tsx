@@ -9,8 +9,8 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
-import DeleteButton from "./DeleteButton";
-import SecondaryButton from "./SecondaryButton";
+import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
+import { colors } from "./utils";
 
 const WarningModal = ({
   isOpen,
@@ -34,25 +34,26 @@ const WarningModal = ({
       <ModalContent mx={4}>
         <ModalHeader>Confirmation</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          <Text fontSize="16px" lineHeight="1.25" mb={8}>
+        <ModalBody bg={colors.secondaryColor[0]}>
+          <Text fontSize="16px" lineHeight="1.25" pb="90px" color="white">
             {message}
           </Text>
         </ModalBody>
 
         <ModalFooter>
           <HStack>
-            <DeleteButton
+            <PrimaryButton
               bgColor="#ff5b5b"
               color="white"
               onClick={onYes}
               _hover={{
-                bgColor: "#ff5b5b90",
+                bgColor: "#ef5b5b",
+                borderColor: "#ff5b5b",
               }}
               size="md"
             >
               Delete
-            </DeleteButton>
+            </PrimaryButton>
             <SecondaryButton size="md" onClick={onClose}>
               Cancel
             </SecondaryButton>

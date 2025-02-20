@@ -1,74 +1,55 @@
-import EmptyTask from "@/components/EmptyTask";
 import { Box, useDisclosure } from "@chakra-ui/react";
 import { isEmpty } from "lodash";
 import Head from "next/head";
-import { useState } from "react";
 import Layout from "@/components/Layout";
-import SearchMenuPopup from "@/components/SearchMenuPopup";
-import SearchTextInput from "@/components/SearchTextInput";
-import TaskList from "@/components/TaskList";
-import { TaskInterface } from "@/types/task";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import WithLoader from "@/components/WithLoader";
-import { KeyedMutator } from "swr";
+import { ProjectInterface } from "@/types/project";
+import EmptyProject from "@/components/project/EmptyProject";
+import ProjectList from "@/components/project/ProjectList";
+import ProjectModel from "@/components/project/ProjectModel";
 
 const HomePage = () => {
-  const [searchText, setSearchText] = useState<string>("");
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isCreateProjectModalOpen,
+    onOpen: onCreateProjectModalOpen,
+    onClose: onCreateProjectModalClose,
+  } = useDisclosure();
 
   return (
     <Box bg="white" h="100vh">
       <Head>
         <title>Home Page</title>
       </Head>
-      <Layout
-        pageTitle="Task Manager"
-        headerActions={
-          <>
-            <SearchTextInput
-              searchText={searchText}
-              onSearchTextChange={setSearchText}
-              display={["none", null, "block"]}
-            />
-            <Box display={["block", null, "none"]}>
-              <SearchMenuPopup
-                isOpen={isOpen}
-                onClose={onClose}
-                onOpen={onOpen}
-                searchText={searchText}
-                onSearchChange={setSearchText}
-                placement="bottom-start"
-              />
-            </Box>
-          </>
-        }
-      >
+      <Layout>
         <>
-          <WithLoader apiUrl={`/getTasks/?searchText=${searchText}`}>
+          <WithLoader apiUrl={`/project/all/`}>
             {({
-              data: tasks,
+              data: projects,
               mutate,
             }: {
-              data: TaskInterface[];
-              mutate: KeyedMutator<TaskInterface[]>;
+              data: ProjectInterface[];
+              mutate: () => void;
             }) => {
               return (
                 <>
-                  {isEmpty(tasks) ? (
-                    <EmptyTask searchText={searchText} showAddLink />
+                  <ProjectModel
+                    isOpen={isCreateProjectModalOpen}
+                    title="Create Project"
+                    onClose={onCreateProjectModalClose}
+                    onSuccess={mutate}
+                  />
+                  {isEmpty(projects) ? (
+                    <EmptyProject />
                   ) : (
-                    <TaskList tasks={tasks} taskListMutate={mutate} />
+                    <ProjectList projects={projects} />
                   )}
                 </>
               );
             }}
           </WithLoader>
 
-          <FloatingActionButton
-            pageLink={`/createTask/${
-              isEmpty(searchText) ? "" : `?title=${searchText}`
-            }`}
-          />
+          <FloatingActionButton onClick={onCreateProjectModalOpen} />
         </>
       </Layout>
     </Box>

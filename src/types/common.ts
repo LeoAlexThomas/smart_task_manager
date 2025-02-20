@@ -32,3 +32,8 @@ export interface RegisterInfoResponse {
   email: string;
   accessToken: string;
 }
+
+export interface CustomSelectOptions {
+  label: string;
+  value: string;
+}
