@@ -12,17 +12,15 @@ import {
   Switch,
   useBreakpointValue,
   Stack,
-  useDisclosure,
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Edit } from "@emotion-icons/boxicons-solid/Edit";
-import { DeleteOutline } from "@emotion-icons/material/DeleteOutline";
+// import { DeleteOutline } from "@emotion-icons/material/DeleteOutline";
 import Link from "next/link";
-import DeleteButton from "@/components/DeleteButton";
-import WarningModal from "@/components/WarningModal";
-import { ApiSuccessResponse, ErrorResponse } from "@/types/common";
+// import WarningModal from "@/components/WarningModal";
+import { ErrorResponse } from "@/types/common";
 import ErrorMsg from "@/components/ErrorMsg";
 import useCustomToast, { ToastStatusEnum } from "@/hook/useCustomToast";
 import { useApi } from "@/hook/useApi";
@@ -36,31 +34,31 @@ const TaskDetails = () => {
   const { showToast } = useCustomToast();
   const { makeApiCall } = useApi();
   const isTablet = useBreakpointValue({ base: true, md: false });
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  // const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const handleDelete = (taskId: string) => {
-    makeApiCall<ApiSuccessResponse<{}>>({
-      apiFn: () =>
-        api(`/task/delete/${taskId}`, {
-          method: "DELETE",
-        }),
-      onSuccess: (res: any) => {
-        onClose();
-        router.replace("/");
-        showToast({
-          title: res.message,
-          status: ToastStatusEnum.success,
-        });
-      },
-      onFailure: (err: any) => {
-        onClose();
-        showToast({
-          title: err?.response?.data?.message ?? "Something went wrong",
-          status: ToastStatusEnum.error,
-        });
-      },
-    });
-  };
+  // const handleDelete = (taskId: string) => {
+  //   makeApiCall<ApiSuccessResponse<{}>>({
+  //     apiFn: () =>
+  //       api(`/task/delete/${taskId}`, {
+  //         method: "DELETE",
+  //       }),
+  //     onSuccess: (res: any) => {
+  //       onClose();
+  //       router.replace("/");
+  //       showToast({
+  //         title: res.message,
+  //         status: ToastStatusEnum.success,
+  //       });
+  //     },
+  //     onFailure: (err: any) => {
+  //       onClose();
+  //       showToast({
+  //         title: err?.response?.data?.message ?? "Something went wrong",
+  //         status: ToastStatusEnum.error,
+  //       });
+  //     },
+  //   });
+  // };
 
   const handleUpdate = (
     updatableTask: TaskInterface,
@@ -122,14 +120,14 @@ const TaskDetails = () => {
             }) => {
               return (
                 <>
-                  <WarningModal
+                  {/* <WarningModal
                     isOpen={isOpen}
                     onClose={onClose}
                     onYes={() => handleDelete(task._id)}
                     message={`Are you sure to delete ${
                       task?.title ?? "this task"
                     }?`}
-                  />
+                  /> */}
                   <VStack alignItems="stretch" spacing={[6, null, 10]}>
                     <HStack
                       alignItems={["flex-start", null, "center"]}
@@ -199,7 +197,7 @@ const TaskDetails = () => {
                           Edit
                         </PrimaryButton>
                       </Link>
-                      <DeleteButton
+                      {/* <DeleteButton
                         leftIcon={
                           <DeleteOutline
                             size={isTablet ? "20px" : "25px"}
@@ -211,7 +209,7 @@ const TaskDetails = () => {
                         onClick={onOpen}
                       >
                         Delete
-                      </DeleteButton>
+                      </DeleteButton> */}
                     </Stack>
                   </VStack>
                 </>
