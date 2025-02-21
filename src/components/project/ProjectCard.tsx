@@ -13,7 +13,7 @@ import { Fragment } from "react";
 
 const ProjectCard = ({ project }: { project: ProjectInterface }) => {
   return (
-    <Link href={`/project/${project._id}`} passHref>
+    <Link href={`/projectId/?id=${project._id}`} passHref>
       <VStack
         boxShadow="md"
         p={4}
