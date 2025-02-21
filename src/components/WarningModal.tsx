@@ -35,7 +35,12 @@ const WarningModal = ({
         <ModalHeader>Confirmation</ModalHeader>
         <ModalCloseButton />
         <ModalBody bg={colors.secondaryColor[0]}>
-          <Text fontSize="16px" lineHeight="1.25" pb="90px" color="white">
+          <Text
+            fontSize={["16px", null, "20px"]}
+            lineHeight="1.25"
+            pb="90px"
+            color="white"
+          >
             {message}
           </Text>
         </ModalBody>
