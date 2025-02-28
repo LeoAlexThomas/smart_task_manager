@@ -4,10 +4,11 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import ProjectInfo from "@/components/project/ProjectInfo";
 import TaskList from "@/components/task/TaskList";
+import isString from "lodash/isString";
 
 const ProjectIdPage = () => {
   const router = useRouter();
-  const projectId = router.query.id;
+  const projectId = router.query.id ?? "";
   return (
     <Box h="100vh">
       <Head>
@@ -15,8 +16,8 @@ const ProjectIdPage = () => {
       </Head>
       <Layout>
         <VStack alignItems="stretch" spacing={4}>
-          <ProjectInfo projectId={String(projectId)} />
-          <TaskList projectId={String(projectId)} />
+          <ProjectInfo projectId={isString(projectId) ? projectId : ""} />
+          <TaskList projectId={isString(projectId) ? projectId : ""} />
         </VStack>
       </Layout>
     </Box>

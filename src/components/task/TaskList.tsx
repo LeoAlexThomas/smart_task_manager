@@ -8,7 +8,7 @@ import {
   VStack,
   Text,
 } from "@chakra-ui/react";
-import { isNil } from "lodash";
+import { isEmpty, isNil } from "lodash";
 import { Fragment, useState } from "react";
 import useSWR from "swr";
 import CustomTaskModel from "@/components/task/CustomTaskModel";
@@ -100,7 +100,9 @@ const TaskColumn = ({
   projectId: string;
 }) => {
   const { data: tasks, error } = useSWR<TaskInterface[]>(
-    `/task/status/${statusColumn}/?projectId=${projectId}`
+    !isEmpty(projectId)
+      ? `/task/status/${statusColumn}?projectId=${projectId}`
+      : ""
   );
 
   const isLoading = !tasks && !error;
